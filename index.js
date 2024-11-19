@@ -152,8 +152,10 @@ FileSelector.addEventListener("change", (event) => {
             canvas.setAttribute("width", SelectedImage.naturalWidth + "px");
             canvas.setAttribute("height", SelectedImage.naturalHeight + "px");
             canvas.style =
-                "left: 0px;" +
-                "top: 0px;" +
+                // "left: 0px;" +
+                // "top: 0px;" +
+                "left: " + SelectedImage.offsetLeft + "px;" +
+                "top: " + SelectedImage.offsetTop + "px;" +
                 "width: " +
                 SelectedImage.width +
                 "px;" +
