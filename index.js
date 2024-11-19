@@ -128,9 +128,50 @@ FileSelector.addEventListener("change", (event) => {
     const reader = new FileReader();
     reader.onload = (e) => {
         SelectedImage.src = e.target.result;
-        SelectedImage.addEventListener("click", handleClick);
     };
     reader.readAsDataURL(file);
+    // 画像が表示されたら、ポーズ推定を行う
+    SelectedImage.onload = () => {
+        if (!poseLandmarker) {
+            console.log("Wait for poseLandmarker to load before clicking!");
+            return;
+        }
+
+        if (runningMode === "VIDEO") {
+            runningMode = "IMAGE";
+            poseLandmarker.setOptions({ runningMode: "IMAGE" });
+        }
+        const allCanvas = SelectedImage.parentNode.getElementsByClassName("canvas");
+        for (var i = allCanvas.length - 1; i >= 0; i--) {
+            const n = allCanvas[i];
+            n.parentNode.removeChild(n);
+        }
+        poseLandmarker.detect(SelectedImage, (result) => {
+            const canvas = document.createElement("canvas");
+            canvas.setAttribute("class", "canvas");
+            canvas.setAttribute("width", SelectedImage.naturalWidth + "px");
+            canvas.setAttribute("height", SelectedImage.naturalHeight + "px");
+            canvas.style =
+                "left: 0px;" +
+                "top: 0px;" +
+                "width: " +
+                SelectedImage.width +
+                "px;" +
+                "height: " +
+                SelectedImage.height +
+                "px;";
+
+            SelectedImage.parentNode.appendChild(canvas);
+            const canvasCtx = canvas.getContext("2d");
+            const drawingUtils = new DrawingUtils(canvasCtx);
+            for (const landmark of result.landmarks) {
+                drawingUtils.drawLandmarks(landmark, {
+                    radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                });
+                drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            }
+        })};
+        
 }
 );
 
