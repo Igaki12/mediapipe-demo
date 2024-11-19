@@ -45,6 +45,18 @@ import {
     demosSection.classList.remove("invisible");
   };
   createPoseLandmarker();
+
+
+//   手持ちの画像をinputに入れて、それを表示する
+    const fileSelector = document.getElementById("fileSelector");
+    const fileSelectorButton = document.getElementById("fileSelectorButton");
+    const imageSelector = document.getElementById("imageSelector");
+
+    fileSelectorButton.addEventListener("click", () => {
+        fileSelector.click();
+    }
+    );
+
   
   /********************************************************************
   // Demo 1: Grab a bunch of images from the page and detection them

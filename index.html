@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <!-- コピー元URL:https://codepen.io/mediapipe-preview/pen/abRLMxN -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +31,8 @@ limitations under the License. -->
 
 
     <h2>Demo: Webcam continuous pose landmarks detection</h2>
-    <p>Stand in front of your webcam to get real-time pose landmarker detection.</br>Click <b>enable webcam</b> below and grant access to the webcam if prompted.</p>
+    <p>ボタンをクリックし、Webカメラを許可することで、リアルタイムで骨格の傾きを検出することができます。</p>
+    <!-- <p>Stand in front of your webcam to get real-time pose landmarker detection.</br>Click <b>enable webcam</b> below and grant access to the webcam if prompted.</p> -->
 
     <div id="liveView" class="videoView">
       <button id="webcamButton" class="mdc-button mdc-button--raised">
@@ -46,6 +47,7 @@ limitations under the License. -->
 
     <h2>Demo: Detecting Images</h2>
     <p><b>Click on an image below</b> to see the key landmarks of the body.</p>
+    <p>サンプル画像</p>
 
     <div class="detectOnClick">
       <!-- source: https://pixabay.com/photos/woman-asia-beautiful-cambodia-1822514/ -->
@@ -55,6 +57,19 @@ limitations under the License. -->
       <!-- source: https://pixabay.com/photos/woman-relaxation-portrait-3053489/ -->
       <img src="https://assets.codepen.io/9177687/woman-g1af8d3deb_640.jpg" width="100%" crossorigin="anonymous" title="Click to get detection!" />
     </div>
+
+    <!-- 手持ちの画像をアップする仕組み -->
+    <h2>Demo: Detecting Images</h2>
+    <p>あなたの画像をアップロードして、骨格の傾きを検出することができます。</p>
+    <input type="file" accept="image/*" id="fileSelector" style="display: none;">
+    <button id="fileSelectorButton" class="mdc-button mdc-button--raised">
+      <span class="mdc-button__ripple"></span>
+      <span class="mdc-button__label">UPLOAD IMAGE</span>
+    </button>
+    <div id="imageSelector" class="detectOnClick"></div>
+    
+
+
   </section>
   </body>
   </html>
