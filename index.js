@@ -61,7 +61,6 @@ import {
 </div> */}
 const FileSelector = document.getElementById("fileSelector");
 const SelectedImage = document.getElementById("selectedImage");
-const FileSelectorButton = document.getElementById("fileSelectorButton");
 
 FileSelector.addEventListener("change", (event) => {
     const file = event.target.files[0];
