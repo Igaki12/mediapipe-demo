@@ -130,10 +130,10 @@ FileSelector.addEventListener("change", (event) => {
         SelectedImage.src = e.target.result;
     };
     reader.readAsDataURL(file);
-    // 画像が選択されたら、handleClickを呼び出す
-    handleClick({ target: SelectedImage });
-    
-
+    // 画像が選択されたら、handleClickをaddEventListenerで付与する
+    SelectedImage.addEventListener("load", () => {
+        SelectedImage.addEventListener("click", handleClick);
+    });
 }
 );
 
