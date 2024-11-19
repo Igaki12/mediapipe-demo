@@ -47,15 +47,38 @@ import {
   createPoseLandmarker();
 
 
-//   手持ちの画像をinputに入れて、それを表示する
-    const fileSelector = document.getElementById("fileSelector");
-    const fileSelectorButton = document.getElementById("fileSelectorButton");
-    const imageSelector = document.getElementById("imageSelector");
+//   手持ちの画像を使って姿勢推定を行うデモ
+// 画像をクリックすると、その画像に対して姿勢推定を行い、結果を表示します。
+//     <h2>Demo: Detecting Images</h2>
+{/* <p>あなたの画像をアップロードして、骨格の傾きを検出することができます。</p>
+<input type="file" accept="image/*" id="fileSelector" style="display: none;">
+<button id="fileSelectorButton" class="mdc-button mdc-button--raised">
+  <span class="mdc-button__ripple"></span>
+  <span class="mdc-button__label">UPLOAD IMAGE</span>
+</button>
+<div　class="detectOnClick">
+  <img id="selectedImage" width="100%" crossorigin="anonymous" title="ここに画像が表示されます！" />
+</div> */}
+const FileSelector = document.getElementById("fileSelector");
+const SelectedImage = document.getElementById("selectedImage");
+const FileSelectorButton = document.getElementById("fileSelectorButton");
 
-    fileSelectorButton.addEventListener("click", () => {
-        fileSelector.click();
+FileSelector.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+
+    if (!file) {
+        return;
     }
-    );
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        SelectedImage.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+);
+
+
 
   
   /********************************************************************
