@@ -118,7 +118,7 @@ async function handleClick(event) {
 
 const FileSelector = document.getElementById("fileSelector");
 const SelectedImage = document.getElementById("selectedImage");
-
+const landmarksPrint = document.getElementById("landmarksPrint");
 FileSelector.addEventListener("change", (event) => {
     const file = event.target.files[0];
     if (!file) {
@@ -171,6 +171,15 @@ FileSelector.addEventListener("change", (event) => {
                     radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
                 });
                 drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+
+                // landmarksPrintに座標を表示
+                landmarksPrint.innerHTML = "";
+                for (const [i, point] of landmark.landmarkList.entries()) {
+                    if (i == 0) {
+                        landmarksPrint.innerHTML = "x: " + point.x + ", y: " + point.y + ", z: " + point.z;
+                    } else {
+                        landmarksPrint.innerHTML += "<br>x: " + point.x + ", y: " + point.y + ", z: " + point.z;
+                    }}
             }
         })};
         
