@@ -16,55 +16,111 @@ import {
     PoseLandmarker,
     FilesetResolver,
     DrawingUtils
-  } from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.0";
-  
-  const demosSection = document.getElementById("demos");
-  
-  let poseLandmarker = undefined;
-  let runningMode = "IMAGE";
-  let enableWebcamButton;
-  let webcamRunning = false;
-  const videoHeight = "360px";
-  const videoWidth = "480px";
-  
-  // Before we can use PoseLandmarker class we must wait for it to finish
-  // loading. Machine Learning models can be large and take a moment to
-  // get everything needed to run.
-  const createPoseLandmarker = async () => {
+} from "https://cdn.skypack.dev/@mediapipe/tasks-vision@0.10.0";
+
+const demosSection = document.getElementById("demos");
+
+let poseLandmarker = undefined;
+let runningMode = "IMAGE";
+let enableWebcamButton;
+let webcamRunning = false;
+const videoHeight = "360px";
+const videoWidth = "480px";
+
+// Before we can use PoseLandmarker class we must wait for it to finish
+// loading. Machine Learning models can be large and take a moment to
+// get everything needed to run.
+const createPoseLandmarker = async () => {
     const vision = await FilesetResolver.forVisionTasks(
-      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm"
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm"
     );
     poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
-      baseOptions: {
-        modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task`,
-        delegate: "GPU"
-      },
-      runningMode: runningMode,
-      numPoses: 2
+        baseOptions: {
+            modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task`,
+            delegate: "GPU"
+        },
+        runningMode: runningMode,
+        numPoses: 2
     });
     demosSection.classList.remove("invisible");
-  };
-  createPoseLandmarker();
+};
+createPoseLandmarker();
 
 
-//   手持ちの画像を使って姿勢推定を行うデモ
-// 画像をクリックすると、その画像に対して姿勢推定を行い、結果を表示します。
-//     <h2>Demo: Detecting Images</h2>
-{/* <p>あなたの画像をアップロードして、骨格の傾きを検出することができます。</p>
-<input type="file" accept="image/*" id="fileSelector" style="display: none;">
-<button id="fileSelectorButton" class="mdc-button mdc-button--raised">
-  <span class="mdc-button__ripple"></span>
-  <span class="mdc-button__label">UPLOAD IMAGE</span>
-</button>
-<div　class="detectOnClick">
-  <img id="selectedImage" width="100%" crossorigin="anonymous" title="ここに画像が表示されます！" />
-</div> */}
+
+
+
+
+/********************************************************************
+// Demo 1: Grab a bunch of images from the page and detection them
+// upon click.
+********************************************************************/
+
+// In this demo, we have put all our clickable images in divs with the
+// CSS class 'detectionOnClick'. Lets get all the elements that have
+// this class.
+const imageContainers = document.getElementsByClassName("detectOnClick");
+
+// Now let's go through all of these and add a click event listener.
+for (let i = 0; i < imageContainers.length; i++) {
+    // Add event listener to the child element whichis the img element.
+    imageContainers[i].children[0].addEventListener("click", handleClick);
+}
+
+// When an image is clicked, let's detect it and display results!
+async function handleClick(event) {
+    if (!poseLandmarker) {
+        console.log("Wait for poseLandmarker to load before clicking!");
+        return;
+    }
+
+    if (runningMode === "VIDEO") {
+        runningMode = "IMAGE";
+        await poseLandmarker.setOptions({ runningMode: "IMAGE" });
+    }
+    // Remove all landmarks drawed before
+    const allCanvas = event.target.parentNode.getElementsByClassName("canvas");
+    for (var i = allCanvas.length - 1; i >= 0; i--) {
+        const n = allCanvas[i];
+        n.parentNode.removeChild(n);
+    }
+
+    // We can call poseLandmarker.detect as many times as we like with
+    // different image data each time. The result is returned in a callback.
+    poseLandmarker.detect(event.target, (result) => {
+        const canvas = document.createElement("canvas");
+        canvas.setAttribute("class", "canvas");
+        canvas.setAttribute("width", event.target.naturalWidth + "px");
+        canvas.setAttribute("height", event.target.naturalHeight + "px");
+        canvas.style =
+            "left: 0px;" +
+            "top: 0px;" +
+            "width: " +
+            event.target.width +
+            "px;" +
+            "height: " +
+            event.target.height +
+            "px;";
+
+        event.target.parentNode.appendChild(canvas);
+        const canvasCtx = canvas.getContext("2d");
+        const drawingUtils = new DrawingUtils(canvasCtx);
+        for (const landmark of result.landmarks) {
+            drawingUtils.drawLandmarks(landmark, {
+                radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+            });
+            drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+        }
+    });
+}
+
+// 手持ちの画像を選択して表示し、ポーズ推定を行う
+
 const FileSelector = document.getElementById("fileSelector");
 const SelectedImage = document.getElementById("selectedImage");
 
 FileSelector.addEventListener("change", (event) => {
     const file = event.target.files[0];
-
     if (!file) {
         return;
     }
@@ -74,159 +130,97 @@ FileSelector.addEventListener("change", (event) => {
         SelectedImage.src = e.target.result;
     };
     reader.readAsDataURL(file);
+    // 画像が選択されたら、handleClickを呼び出す
+    handleClick({ target: SelectedImage });
+    
+
 }
 );
 
 
+/********************************************************************
+// Demo 2: Continuously grab image from webcam stream and detect it.
+********************************************************************/
 
-  
-  /********************************************************************
-  // Demo 1: Grab a bunch of images from the page and detection them
-  // upon click.
-  ********************************************************************/
-  
-  // In this demo, we have put all our clickable images in divs with the
-  // CSS class 'detectionOnClick'. Lets get all the elements that have
-  // this class.
-  const imageContainers = document.getElementsByClassName("detectOnClick");
-  
-  // Now let's go through all of these and add a click event listener.
-  for (let i = 0; i < imageContainers.length; i++) {
-    // Add event listener to the child element whichis the img element.
-    imageContainers[i].children[0].addEventListener("click", handleClick);
-  }
-  
-  // When an image is clicked, let's detect it and display results!
-  async function handleClick(event) {
-    if (!poseLandmarker) {
-      console.log("Wait for poseLandmarker to load before clicking!");
-      return;
-    }
-  
-    if (runningMode === "VIDEO") {
-      runningMode = "IMAGE";
-      await poseLandmarker.setOptions({ runningMode: "IMAGE" });
-    }
-    // Remove all landmarks drawed before
-    const allCanvas = event.target.parentNode.getElementsByClassName("canvas");
-    for (var i = allCanvas.length - 1; i >= 0; i--) {
-      const n = allCanvas[i];
-      n.parentNode.removeChild(n);
-    }
-  
-    // We can call poseLandmarker.detect as many times as we like with
-    // different image data each time. The result is returned in a callback.
-    poseLandmarker.detect(event.target, (result) => {
-      const canvas = document.createElement("canvas");
-      canvas.setAttribute("class", "canvas");
-      canvas.setAttribute("width", event.target.naturalWidth + "px");
-      canvas.setAttribute("height", event.target.naturalHeight + "px");
-      canvas.style =
-        "left: 0px;" +
-        "top: 0px;" +
-        "width: " +
-        event.target.width +
-        "px;" +
-        "height: " +
-        event.target.height +
-        "px;";
-  
-      event.target.parentNode.appendChild(canvas);
-      const canvasCtx = canvas.getContext("2d");
-      const drawingUtils = new DrawingUtils(canvasCtx);
-      for (const landmark of result.landmarks) {
-        drawingUtils.drawLandmarks(landmark, {
-          radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-        });
-        drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
-      }
-    });
-  }
-  
-  /********************************************************************
-  // Demo 2: Continuously grab image from webcam stream and detect it.
-  ********************************************************************/
-  
-  const video = document.getElementById("webcam");
-  if (!(video instanceof HTMLVideoElement)) {
+const video = document.getElementById("webcam");
+if (!(video instanceof HTMLVideoElement)) {
     throw new Error("Webcam element not found or is not a video element");
-  }
-  const canvasElement = document.getElementById("output_canvas");
-  if (!(canvasElement instanceof HTMLCanvasElement)) {
+}
+const canvasElement = document.getElementById("output_canvas");
+if (!(canvasElement instanceof HTMLCanvasElement)) {
     throw new Error("Output canvas element not found or is not a canvas element");
-  }
-  const canvasCtx = canvasElement.getContext("2d");
-  const drawingUtils = new DrawingUtils(canvasCtx);
-  
-  // Check if webcam access is supported.
-  const hasGetUserMedia = () => !!navigator.mediaDevices?.getUserMedia;
-  
-  // If webcam supported, add event listener to button for when user
-  // wants to activate it.
-  if (hasGetUserMedia()) {
+}
+const canvasCtx = canvasElement.getContext("2d");
+const drawingUtils = new DrawingUtils(canvasCtx);
+
+// Check if webcam access is supported.
+const hasGetUserMedia = () => !!navigator.mediaDevices?.getUserMedia;
+
+// If webcam supported, add event listener to button for when user
+// wants to activate it.
+if (hasGetUserMedia()) {
     enableWebcamButton = document.getElementById("webcamButton");
     enableWebcamButton.addEventListener("click", enableCam);
-  } else {
+} else {
     console.warn("getUserMedia() is not supported by your browser");
-  }
-  
-  // Enable the live webcam view and start detection.
-  function enableCam(event) {
+}
+
+// Enable the live webcam view and start detection.
+function enableCam(event) {
     if (!poseLandmarker) {
-      console.log("Wait! poseLandmaker not loaded yet.");
-      return;
+        console.log("Wait! poseLandmaker not loaded yet.");
+        return;
     }
-  
+
     if (webcamRunning === true) {
-      webcamRunning = false;
-      enableWebcamButton.innerText = "ENABLE PREDICTIONS";
+        webcamRunning = false;
+        enableWebcamButton.innerText = "ENABLE PREDICTIONS";
     } else {
-      webcamRunning = true;
-      enableWebcamButton.innerText = "DISABLE PREDICTIONS";
+        webcamRunning = true;
+        enableWebcamButton.innerText = "DISABLE PREDICTIONS";
     }
-  
+
     // getUsermedia parameters.
     const constraints = {
-      video: true
+        video: true
     };
-  
+
     // Activate the webcam stream.
     navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-      video.srcObject = stream;
-      video.addEventListener("loadeddata", predictWebcam);
+        video.srcObject = stream;
+        video.addEventListener("loadeddata", predictWebcam);
     });
-  }
-  
-  let lastVideoTime = -1;
-  async function predictWebcam() {
+}
+
+let lastVideoTime = -1;
+async function predictWebcam() {
     canvasElement.style.height = videoHeight;
     video.style.height = videoHeight;
     canvasElement.style.width = videoWidth;
     video.style.width = videoWidth;
     // Now let's start detecting the stream.
     if (runningMode === "IMAGE") {
-      runningMode = "VIDEO";
-      await poseLandmarker.setOptions({ runningMode: "VIDEO" });
+        runningMode = "VIDEO";
+        await poseLandmarker.setOptions({ runningMode: "VIDEO" });
     }
     let startTimeMs = performance.now();
     if (lastVideoTime !== video.currentTime) {
-      lastVideoTime = video.currentTime;
-      poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
-        canvasCtx.save();
-        canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-        for (const landmark of result.landmarks) {
-          drawingUtils.drawLandmarks(landmark, {
-            radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-          });
-          drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
-        }
-        canvasCtx.restore();
-      });
+        lastVideoTime = video.currentTime;
+        poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+            for (const landmark of result.landmarks) {
+                drawingUtils.drawLandmarks(landmark, {
+                    radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                });
+                drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            }
+            canvasCtx.restore();
+        });
     }
-  
+
     // Call this function again to keep predicting when the browser is ready.
     if (webcamRunning === true) {
-      window.requestAnimationFrame(predictWebcam);
+        window.requestAnimationFrame(predictWebcam);
     }
-  }
-  
+}
