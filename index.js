@@ -128,12 +128,9 @@ FileSelector.addEventListener("change", (event) => {
     const reader = new FileReader();
     reader.onload = (e) => {
         SelectedImage.src = e.target.result;
+        SelectedImage.addEventListener("click", handleClick);
     };
     reader.readAsDataURL(file);
-    // 画像が選択されたら、handleClickをaddEventListenerで付与する
-    SelectedImage.addEventListener("load", () => {
-        SelectedImage.addEventListener("click", handleClick);
-    });
 }
 );
 
