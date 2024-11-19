@@ -173,6 +173,8 @@ FileSelector.addEventListener("change", (event) => {
                 drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
 
                 // landmarksPrintに座標を表示
+                console.log("landmark : ");
+                console.log(landmark);
                 landmarksPrint.innerHTML = "";
                 for (const [i, point] of landmark.landmarkList.entries()) {
                     if (i == 0) {
