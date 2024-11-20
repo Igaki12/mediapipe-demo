@@ -112,3 +112,21 @@ footer {
 .detectOnClick img {
   width: 100%;
 }
+/* 一般的なtableデザイン */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 auto;
+}
+table th {
+  background-color: #f2f2f2;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
