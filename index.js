@@ -231,7 +231,8 @@ FileSelector.addEventListener("change", (event) => {
 // 30 - right heel
 // 31 - left foot index
 // 32 - right foot index
-                worldLandmarksPrint.innerHTML = "33点の座標(単位：メートル)<br>";
+                worldLandmarksPrint.innerHTML = "33点の座標(単位：メートル)<br>X軸は右方向、Y軸は上方向、Z軸は手前方向です。<br>";
+                worldLandmarksPrint.innerHTML += "点の読み取りについては、Google Mediapipeの公式ドキュメントを参照してください : <a href='https://https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker?hl=ja' target='_blank'>https://https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker?hl=ja</a><br><br>";
                 const positionNamesJP = [
                     "鼻 (nose)",
                     "左目-内側 (left eye - inner)",
