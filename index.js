@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 import {
     PoseLandmarker,
     FilesetResolver,
@@ -251,7 +250,7 @@ FileSelector.addEventListener("change", (event) => {
                 ];
                 // 座標はx, y, zの3つの値で、それぞれ小数点以下3桁まで表示
                 for (const [i, point] of result.worldLandmarks.entries()) {
-                    worldLandmarksPrint.innerHTML += `${positionNamesJP[i]} : x = ${point.x.toFixed(3)}m, y = ${point.y.toFixed(3)}m, z = ${point.z.toFixed(3)}m<br><br>`;
+                    worldLandmarksPrint.innerHTML += `${positionNamesJP[i]} : x = ${Math.round(point.x * 1000) / 1000}m, y = ${Math.round(point.y * 1000) / 1000}m, z = ${Math.round(point.z * 1000) / 1000}m<br>`;
                 }
                 worldLandmarksPrint.innerHTML += "解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める<br>";
                 const leftHip = result.worldLandmarks[23];
@@ -261,9 +260,9 @@ FileSelector.addEventListener("change", (event) => {
                     y: (leftHip.y + rightHip.y) / 2,
                     z: (leftHip.z + rightHip.z) / 2
                 };
-                worldLandmarksPrint.innerHTML += `左腰 : x = ${leftHip.x.toFixed(3)}m, y = ${leftHip.y.toFixed(3)}m, z = ${leftHip.z.toFixed(3)}m<br>`;
-                worldLandmarksPrint.innerHTML += `右腰 : x = ${rightHip.x.toFixed(3)}m, y = ${rightHip.y.toFixed(3)}m, z = ${rightHip.z.toFixed(3)}m<br>`;
-                worldLandmarksPrint.innerHTML += `腰の中点 : x = ${hipCenter.x.toFixed(3)}m, y = ${hipCenter.y.toFixed(3)}m, z = ${hipCenter.z.toFixed(3)}m<br><br>`;
+                worldLandmarksPrint.innerHTML += `左腰 : x = ${Math.round(leftHip.x * 1000) / 1000}m, y = ${Math.round(leftHip.y * 1000) / 1000}m, z = ${Math.round(leftHip.z * 1000) / 1000}m<br>`;
+                worldLandmarksPrint.innerHTML += `右腰 : x = ${Math.round(rightHip.x * 1000) / 1000}m, y = ${Math.round(rightHip.y * 1000) / 1000}m, z = ${Math.round(rightHip.z * 1000) / 1000}m<br>`;
+                worldLandmarksPrint.innerHTML += `腰の中点 : x = ${Math.round(hipCenter.x * 1000) / 1000}m, y = ${Math.round(hipCenter.y * 1000) / 1000}m, z = ${Math.round(hipCenter.z * 1000) / 1000}m<br><br>`;
                 worldLandmarksPrint.innerHTML += "解析(2) : 肩の左右の座標と肩の中点の座標を求める<br>";
                 const leftShoulder = result.worldLandmarks[11];
                 const rightShoulder = result.worldLandmarks[12];
@@ -272,9 +271,9 @@ FileSelector.addEventListener("change", (event) => {
                     y: (leftShoulder.y + rightShoulder.y) / 2,
                     z: (leftShoulder.z + rightShoulder.z) / 2
                 };
-                worldLandmarksPrint.innerHTML += `左肩 : x = ${leftShoulder.x.toFixed(3)}m, y = ${leftShoulder.y.toFixed(3)}m, z = ${leftShoulder.z.toFixed(3)}m<br>`;
-                worldLandmarksPrint.innerHTML += `右肩 : x = ${rightShoulder.x.toFixed(3)}m, y = ${rightShoulder.y.toFixed(3)}m, z = ${rightShoulder.z.toFixed(3)}m<br>`;
-                worldLandmarksPrint.innerHTML += `肩の中点 : x = ${shoulderCenter.x.toFixed(3)}m, y = ${shoulderCenter.y.toFixed(3)}m, z = ${shoulderCenter.z.toFixed(3)}m<br><br>`;
+                worldLandmarksPrint.innerHTML += `左肩 : x = ${Math.round(leftShoulder.x * 1000) / 1000}m, y = ${Math.round(leftShoulder.y * 1000) / 1000}m, z = ${Math.round(leftShoulder.z * 1000) / 1000}m<br>`;
+                worldLandmarksPrint.innerHTML += `右肩 : x = ${Math.round(rightShoulder.x * 1000) / 1000}m, y = ${Math.round(rightShoulder.y * 1000) / 1000}m, z = ${Math.round(rightShoulder.z * 1000) / 1000}m<br>`;
+                worldLandmarksPrint.innerHTML += `肩の中点 : x = ${Math.round(shoulderCenter.x * 1000) / 1000}m, y = ${Math.round(shoulderCenter.y * 1000) / 1000}m, z = ${Math.round(shoulderCenter.z * 1000) / 1000}m<br><br>`;
                 worldLandmarksPrint.innerHTML += "解析(3) : 左右腰を結ぶ線と左右肩を結ぶ線が(立体的に)どの程度平行かを求める<br>";
                 const hipLine = {
                     x: rightHip.x - leftHip.x,
@@ -290,9 +289,9 @@ FileSelector.addEventListener("change", (event) => {
                 const hipLineNorm = Math.sqrt(hipLine.x ** 2 + hipLine.y ** 2 + hipLine.z ** 2);
                 const shoulderLineNorm = Math.sqrt(shoulderLine.x ** 2 + shoulderLine.y ** 2 + shoulderLine.z ** 2);
                 const cosTheta = innerProduct / (hipLineNorm * shoulderLineNorm);
-                worldLandmarksPrint.innerHTML += `左右腰を結ぶ線 : x = ${hipLine.x.toFixed(3)}m, y = ${hipLine.y.toFixed(3)}m, z = ${hipLine.z.toFixed(3)}m<br>`;
-                worldLandmarksPrint.innerHTML += `左右肩を結ぶ線 : x = ${shoulderLine.x.toFixed(3)}m, y = ${shoulderLine.y.toFixed(3)}m, z = ${shoulderLine.z.toFixed(3)}m<br>`;
-                worldLandmarksPrint.innerHTML += `cos(左右腰と左右肩のなす角度) = ${cosTheta.toFixed(3)}<br><br>`;
+                worldLandmarksPrint.innerHTML += `左右腰を結ぶ線 : x = ${Math.round(hipLine.x * 1000) / 1000}m, y = ${Math.round(hipLine.y * 1000) / 1000}m, z = ${Math.round(hipLine.z * 1000) / 1000}m<br>`;
+                worldLandmarksPrint.innerHTML += `左右肩を結ぶ線 : x = ${Math.round(shoulderLine.x * 1000) / 1000}m, y = ${Math.round(shoulderLine.y * 1000) / 1000}m, z = ${Math.round(shoulderLine.z * 1000) / 1000}m<br>`;
+                worldLandmarksPrint.innerHTML += `cos(左右腰と左右肩のなす角度) = ${Math.round(cosTheta * 1000) / 1000}<br><br>`;
                 worldLandmarksPrint.innerHTML += `これは角度として${Math.acos(cosTheta) * 180 / Math.PI}度に相当します。<br><br>`;
                 worldLandmarksPrint.innerHTML += "解析(4) : 腰の中点と肩の中点を結ぶ線が(立体的に)どの程度垂直かを求める<br>";
                 const hipShoulderLine = {
@@ -303,8 +302,8 @@ FileSelector.addEventListener("change", (event) => {
                 const innerProduct2 = hipLine.x * hipShoulderLine.x + hipLine.y * hipShoulderLine.y + hipLine.z * hipShoulderLine.z;
                 const hipShoulderLineNorm = Math.sqrt(hipShoulderLine.x ** 2 + hipShoulderLine.y ** 2 + hipShoulderLine.z ** 2);
                 const cosTheta2 = innerProduct2 / (hipLineNorm * hipShoulderLineNorm);
-                worldLandmarksPrint.innerHTML += `腰の中点と肩の中点を結ぶ線 : x = ${hipShoulderLine.x.toFixed(3)}m, y = ${hipShoulderLine.y.toFixed(3)}m, z = ${hipShoulderLine.z.toFixed(3)}m<br>`;
-                worldLandmarksPrint.innerHTML += `cos(左右腰と腰の中点と肩の中点を結ぶ線のなす角度) = ${cosTheta2.toFixed(3)}<br><br>`;
+                worldLandmarksPrint.innerHTML += `腰の中点と肩の中点を結ぶ線 : x = ${Math.round(hipShoulderLine.x * 1000) / 1000}m, y = ${Math.round(hipShoulderLine.y * 1000) / 1000}m, z = ${Math.round(hipShoulderLine.z * 1000) / 1000}m<br>`;
+                worldLandmarksPrint.innerHTML += `cos(左右腰と腰の中点と肩の中点を結ぶ線のなす角度) = ${Math.round(cosTheta2 * 1000) / 1000}<br><br>`;
                 worldLandmarksPrint.innerHTML += `これは角度として${Math.acos(cosTheta2) * 180 / Math.PI}度に相当します。<br><br>`;
 
 
