@@ -477,18 +477,45 @@ FileSelector.addEventListener("change", (event) => {
                 y: shoulderCenterAfterAnalysis2Landmark.y + (leftShoulderAfterAnalysis1Landmark.y - shoulderCenter.y),
                 z: shoulderCenterAfterAnalysis2Landmark.z + (leftShoulderAfterAnalysis1Landmark.z - shoulderCenter.z)
             };
-            worldLandmarksPrint.innerHTML += `<br><br>画像に追加するための情報 : <br>右肩移動後 : x = ${Math.round(rightShoulderAfterConclusionLandmark.x * 1000) / 10}, y = ${Math.round(rightShoulderAfterConclusionLandmark.y * 1000) / 10}<br>`;
-            worldLandmarksPrint.innerHTML += `左肩移動後 : x = ${Math.round(leftShoulderAfterConclusionLandmark.x * 1000) / 10}, y = ${Math.round(leftShoulderAfterConclusionLandmark.y * 1000) / 10}<br>`;
+            worldLandmarksPrint.innerHTML += `<br><br>画像に追加するための情報 : <br>右肩移動後 : x = ${Math.round(rightShoulderAfterConclusionLandmark.x * 1000) / 1000}, y = ${Math.round(rightShoulderAfterConclusionLandmark.y * 1000) / 1000}<br>`;
+            worldLandmarksPrint.innerHTML += `左肩移動後 : x = ${Math.round(leftShoulderAfterConclusionLandmark.x * 1000) / 10}, y = ${Math.round(leftShoulderAfterConclusionLandmark.y * 1000) / 1000}<br>`;
             // canvasに半径2の赤い点を描画する
-            const additionalCtx = canvas.getContext("2d");
-            additionalCtx.beginPath();
-            additionalCtx.arc(rightShoulderAfterConclusionLandmark.x * canvas.style.width, rightShoulderAfterConclusionLandmark.y * canvas.style.height, 2, 0, 2 * Math.PI);
-            additionalCtx.fillStyle = "red";
-            additionalCtx.fill();
-            additionalCtx.beginPath();
-            additionalCtx.arc(leftShoulderAfterConclusionLandmark.x * canvas.style.width, leftShoulderAfterConclusionLandmark.y * canvas.style.height, 2, 0, 2 * Math.PI);
-            additionalCtx.fillStyle = "red";
-            additionalCtx.fill();
+// const canvas = document.createElement("canvas");
+// canvas.setAttribute("class", "canvas");
+// canvas.setAttribute("width", SelectedImage.naturalWidth + "px");
+// canvas.setAttribute("height", SelectedImage.naturalHeight + "px");
+// canvas.style =
+//     "left: " + SelectedImage.offsetLeft + "px;" +
+//     "top: " + SelectedImage.offsetTop + "px;" +
+//     "width: " +
+//     SelectedImage.width +
+//     "px;" +
+//     "height: " +
+//     SelectedImage.height +
+//     "px;";
+
+// SelectedImage.parentNode.appendChild(canvas);
+
+            const additionalCanvas = document.createElement("canvas");
+            additionalCanvas.setAttribute("class", "canvas");
+            additionalCanvas.setAttribute("width", SelectedImage.naturalWidth + "px");
+            additionalCanvas.setAttribute("height", SelectedImage.naturalHeight + "px");
+            additionalCanvas.style =
+                "left: " + SelectedImage.offsetLeft + "px;" +
+                "top: " + SelectedImage.offsetTop + "px;" +
+                "width: " +
+                SelectedImage.width +
+                "px;" +
+                "height: " +
+                SelectedImage.height +
+                "px;";
+            SelectedImage.parentNode.appendChild(additionalCanvas);
+            const additionalCanvasCtx = additionalCanvas.getContext("2d");
+            const additionalDrawingUtils = new DrawingUtils(additionalCanvasCtx);
+            additionalDrawingUtils.drawLandmarks([rightShoulderAfterConclusionLandmark, leftShoulderAfterConclusionLandmark], {
+                color: "red",
+                radius: 2
+            });
 
         }
         );
