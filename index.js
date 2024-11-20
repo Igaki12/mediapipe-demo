@@ -273,7 +273,8 @@ FileSelector.addEventListener("change", (event) => {
                     worldLandmarksPrint.innerHTML += `${positionNamesJP[i]} : x = ${Math.round(point.x * 1000) / 10}cm, y = ${Math.round(point.y * 1000) / 10}cm, z = ${Math.round(point.z * 1000) / 10}cm<br>`;
                 }
                 worldLandmarksPrint.innerHTML += "<br>";
-                worldLandmarksPrint.innerHTML += "解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める<br>";
+                // worldLandmarksPrint.innerHTML += "解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める<br>";
+                worldLandmarksPrint.innerHTML += "<h2>解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める</h2>";
                 const leftHip = result.worldLandmarks[0][23];
                 const rightHip = result.worldLandmarks[0][24];
                 const hipCenter = {
@@ -284,7 +285,8 @@ FileSelector.addEventListener("change", (event) => {
                 worldLandmarksPrint.innerHTML += `左腰 : x = ${Math.round(leftHip.x * 1000) / 10}cm, y = ${Math.round(leftHip.y * 1000) / 10}cm, z = ${Math.round(leftHip.z * 1000) / 10}cm<br>`;
                 worldLandmarksPrint.innerHTML += `右腰 : x = ${Math.round(rightHip.x * 1000) / 10}cm, y = ${Math.round(rightHip.y * 1000) / 10}cm, z = ${Math.round(rightHip.z * 1000) / 10}cm<br>`;
                 worldLandmarksPrint.innerHTML += `腰の中点 : x = ${Math.round(hipCenter.x * 1000) / 10}cm, y = ${Math.round(hipCenter.y * 1000) / 10}cm, z = ${Math.round(hipCenter.z * 1000) / 10}cm<br><br>`;
-                worldLandmarksPrint.innerHTML += "解析(2) : 肩の左右の座標と肩の中点の座標を求める<br>";
+                // worldLandmarksPrint.innerHTML += "解析(2) : 肩の左右の座標と肩の中点の座標を求める<br>";
+                worldLandmarksPrint.innerHTML += "<h2>解析(2) : 肩の左右の座標と肩の中点の座標を求める</h2>";
                 const leftShoulder = result.worldLandmarks[0][11];
                 const rightShoulder = result.worldLandmarks[0][12];
                 const shoulderCenter = {
@@ -295,7 +297,8 @@ FileSelector.addEventListener("change", (event) => {
                 worldLandmarksPrint.innerHTML += `左肩 : x = ${Math.round(leftShoulder.x * 1000) / 10}cm, y = ${Math.round(leftShoulder.y * 1000) / 10}cm, z = ${Math.round(leftShoulder.z * 1000) / 10}cm<br>`;
                 worldLandmarksPrint.innerHTML += `右肩 : x = ${Math.round(rightShoulder.x * 1000) / 10}cm, y = ${Math.round(rightShoulder.y * 1000) / 10}cm, z = ${Math.round(rightShoulder.z * 1000) / 10}cm<br>`;
                 worldLandmarksPrint.innerHTML += `肩の中点 : x = ${Math.round(shoulderCenter.x * 1000) / 10}cm, y = ${Math.round(shoulderCenter.y * 1000) / 10}cm, z = ${Math.round(shoulderCenter.z * 1000) / 10}cm<br><br>`;
-                worldLandmarksPrint.innerHTML += "解析(3) : 左右腰を結ぶ線と左右肩を結ぶ線が(立体的に)どの程度平行かを求める<br>";
+                // worldLandmarksPrint.innerHTML += "解析(3) : 左右腰を結ぶ線と左右肩を結ぶ線が(立体的に)どの程度平行かを求める<br>";
+                worldLandmarksPrint.innerHTML += "<h2>解析(3) : 左右腰を結ぶ線と左右肩を結ぶ線が(立体的に)どの程度平行かを求める</h2>";
                 const hipLine = {
                     x: rightHip.x - leftHip.x,
                     y: rightHip.y - leftHip.y,
@@ -321,7 +324,8 @@ FileSelector.addEventListener("change", (event) => {
                 worldLandmarksPrint.innerHTML += `z = ${Math.round((hipLine.z - shoulderLine.z) * 1000) / 10}cm<br><br>`;
 
 
-                worldLandmarksPrint.innerHTML += "解析(4) : 腰の中点と肩の中点を結ぶ線が(立体的に)どの程度垂直かを求める<br>";
+                // worldLandmarksPrint.innerHTML += "解析(4) : 腰の中点と肩の中点を結ぶ線が(立体的に)どの程度垂直かを求める<br>";
+                worldLandmarksPrint.innerHTML += "<h2>解析(4) : 腰の中点と肩の中点を結ぶ線が(立体的に)どの程度垂直かを求める</h2>";
                 const hipShoulderLine = {
                     x: shoulderCenter.x - hipCenter.x,
                     y: shoulderCenter.y - hipCenter.y,
@@ -335,9 +339,10 @@ FileSelector.addEventListener("change", (event) => {
                 worldLandmarksPrint.innerHTML += `これは角度として${Math.round(Math.acos(cosTheta2) * 180 / Math.PI * 1000) / 1000}度に相当します。<br><br>`;
                 worldLandmarksPrint.innerHTML += "腰の中点と肩の中点を結ぶ線を垂直にすることで、立ち姿勢のバランスを整えることができます。<br><br>";
                 worldLandmarksPrint.innerHTML += "修正に必要な左右の肩の平行移動量(両方の肩を同じ方向に移動させる): <br>";
-                worldLandmarksPrint.innerHTML += `x = ${Math.round(hipShoulderLine.x * 1000) / 10}cm, `;
-                worldLandmarksPrint.innerHTML += `y = ${Math.round(hipShoulderLine.y * 1000) / 10}cm, `;
-                worldLandmarksPrint.innerHTML += `z = ${Math.round(hipShoulderLine.z * 1000) / 10}cm<br><br>`;
+                // hipShoulderLineとhipLineの内積が0になるようなshoulderCenterの移動量を求める
+                worldLandmarksPrint.innerHTML += `x = ${Math.round((hipLine.x * hipShoulderLine.x / hipLineNorm) * 1000) / 10}cm, `;
+                worldLandmarksPrint.innerHTML += `y = ${Math.round((hipLine.y * hipShoulderLine.y / hipLineNorm) * 1000) / 10}cm, `;
+                worldLandmarksPrint.innerHTML += `z = ${Math.round((hipLine.z * hipShoulderLine.z / hipLineNorm) * 1000) / 10}cm<br><br>`;
 
 
 
