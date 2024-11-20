@@ -371,7 +371,7 @@ FileSelector.addEventListener("change", (event) => {
                 z: shoulderCenter.z - (0.5 * hipLine.z * shoulderLength / hipLength)
             };
             worldLandmarksPrint.innerHTML += `右肩 : Δx = ${Math.round((rightShoulderAfterAnalysis1.x - rightShoulder.x) * 1000) / 10}cm, Δy = ${Math.round((rightShoulderAfterAnalysis1.y - rightShoulder.y) * 1000) / 10}cm, Δz = ${Math.round((rightShoulderAfterAnalysis1.z - rightShoulder.z) * 1000) / 10}cm<br>`;
-            worldLandmarksPrint.innerHTML += `左肩 : x = ${Math.round((leftShoulderAfterAnalysis1.x - leftShoulder.x) * 1000) / 10}cm, Δy = ${Math.round((leftShoulderAfterAnalysis1.y - leftShoulder.y) * 1000) / 10}cm, Δz = ${Math.round((leftShoulderAfterAnalysis1.z - leftShoulder.z) * 1000) / 10}cm<br><br>`;
+            worldLandmarksPrint.innerHTML += `左肩 : Δx = ${Math.round((leftShoulderAfterAnalysis1.x - leftShoulder.x) * 1000) / 10}cm, Δy = ${Math.round((leftShoulderAfterAnalysis1.y - leftShoulder.y) * 1000) / 10}cm, Δz = ${Math.round((leftShoulderAfterAnalysis1.z - leftShoulder.z) * 1000) / 10}cm<br><br>`;
 
             // 同じ計算をlandmarksに対して行う
             const rightShoulderLandmark = result.worldLandmarks[0][12];
@@ -403,7 +403,8 @@ FileSelector.addEventListener("change", (event) => {
             drawingUtils.drawLandmarks([rightShoulderLandmarkAfter, leftShoulderLandmarkAfter], {
                 // 色を変える
                 color: "red",
-                radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                // 半径を大きくする
+                radius: 10
             });
             // drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
 
