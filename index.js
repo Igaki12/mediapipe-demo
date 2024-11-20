@@ -315,10 +315,11 @@ FileSelector.addEventListener("change", (event) => {
                 worldLandmarksPrint.innerHTML += `cos(左右腰と左右肩のなす角度) = ${Math.round(cosTheta * 1000) / 1000}<br><br>`;
                 worldLandmarksPrint.innerHTML += `これは角度として${Math.round(Math.acos(cosTheta) * 180 / Math.PI * 1000) / 1000}度に相当します。<br><br>`;
                 worldLandmarksPrint.innerHTML += "左右の肩を腰の線に対して平行になるように修正してこの角度を0にすることで、立ち姿勢を正すことができます。<br><br>";
-                worldLandmarksPrint.innerHTML += "修正に必要な左の肩の移動量 : <br>";
-                worldLandmarksPrint.innerHTML += `x = ${Math.round((hipLineNorm * shoulderLineNorm * Math.cos(Math.acos(cosTheta)) - innerProduct) / hipLineNorm * hipLine.x * 1000) / 10}cm, `;
-                worldLandmarksPrint.innerHTML += `y = ${Math.round((hipLineNorm * shoulderLineNorm * Math.cos(Math.acos(cosTheta)) - innerProduct) / hipLineNorm * hipLine.y * 1000) / 10}cm, `;
-                worldLandmarksPrint.innerHTML += `z = ${Math.round((hipLineNorm * shoulderLineNorm * Math.cos(Math.acos(cosTheta)) - innerProduct) / hipLineNorm * hipLine.z * 1000) / 10}cm<br><br>`;
+                worldLandmarksPrint.innerHTML += "修正に必要な左の肩の移動量 (右の肩は固定したまま): <br>";
+                worldLandmarksPrint.innerHTML += `x = ${Math.round((hipLine.x - shoulderLine.x) * 1000) / 10}cm, `;
+                worldLandmarksPrint.innerHTML += `y = ${Math.round((hipLine.y - shoulderLine.y) * 1000) / 10}cm, `;
+                worldLandmarksPrint.innerHTML += `z = ${Math.round((hipLine.z - shoulderLine.z) * 1000) / 10}cm<br><br>`;
+
 
                 worldLandmarksPrint.innerHTML += "解析(4) : 腰の中点と肩の中点を結ぶ線が(立体的に)どの程度垂直かを求める<br>";
                 const hipShoulderLine = {
@@ -333,10 +334,10 @@ FileSelector.addEventListener("change", (event) => {
                 worldLandmarksPrint.innerHTML += `cos(左右腰と腰の中点と肩の中点を結ぶ線のなす角度) = ${Math.round(cosTheta2 * 1000) / 1000}<br><br>`;
                 worldLandmarksPrint.innerHTML += `これは角度として${Math.round(Math.acos(cosTheta2) * 180 / Math.PI * 1000) / 1000}度に相当します。<br><br>`;
                 worldLandmarksPrint.innerHTML += "腰の中点と肩の中点を結ぶ線を垂直にすることで、立ち姿勢のバランスを整えることができます。<br><br>";
-                worldLandmarksPrint.innerHTML += "修正に必要な左右の肩の平行移動量 : <br>";
-                worldLandmarksPrint.innerHTML += `x = ${Math.round((hipLineNorm * hipShoulderLineNorm * Math.cos(Math.acos(cosTheta2)) - innerProduct2) / hipLineNorm * hipLine.x * 1000) / 10}cm, `;
-                worldLandmarksPrint.innerHTML += `y = ${Math.round((hipLineNorm * hipShoulderLineNorm * Math.cos(Math.acos(cosTheta2)) - innerProduct2) / hipLineNorm * hipLine.y * 1000) / 10}cm, `;
-                worldLandmarksPrint.innerHTML += `z = ${Math.round((hipLineNorm * hipShoulderLineNorm * Math.cos(Math.acos(cosTheta2)) - innerProduct2) / hipLineNorm * hipLine.z * 1000) / 10}cm<br><br>`;
+                worldLandmarksPrint.innerHTML += "修正に必要な左右の肩の平行移動量(両方の肩を同じ方向に移動させる): <br>";
+                worldLandmarksPrint.innerHTML += `x = ${Math.round(hipShoulderLine.x * 1000) / 10}cm, `;
+                worldLandmarksPrint.innerHTML += `y = ${Math.round(hipShoulderLine.y * 1000) / 10}cm, `;
+                worldLandmarksPrint.innerHTML += `z = ${Math.round(hipShoulderLine.z * 1000) / 10}cm<br><br>`;
 
 
 
