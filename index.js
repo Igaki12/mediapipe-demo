@@ -276,30 +276,29 @@ FileSelector.addEventListener("change", (event) => {
                     worldLandmarksTable.innerHTML += `<tr><td>${i+1}. ${positionNamesJP[i]}</td><td>${Math.round(point.x * 1000) / 10}</td><td>${Math.round(point.y * 1000) / 10}</td><td>${Math.round(point.z * 1000) / 10}</td></tr>`;
                 }
                 // worldLandmarksTableの各列について、行の並び替え機能を追加する
-                // 1行目はヘッダー行なので、2行目以降を対象にする
-                for (let i = 1; i < worldLandmarksTable.rows.length; i++) {
-                    worldLandmarksTable.rows[i].addEventListener("click", () => {
-                        // ヘッダー行の項目に、並び替えのための矢印を追加する
-                        const headerCells = worldLandmarksTable.rows[0].cells;
-                        for (const cell of headerCells) {
-                            cell.innerHTML = cell.innerHTML.replace(/▲|▼/, "");
-                        }
-                        const headerCell = worldLandmarksTable.rows[0].cells[i];
-                        headerCell.innerHTML += "▼";
-                        // 並び替えを行う
-                        const rows = Array.from(worldLandmarksTable.rows).slice(1);
-                        const sortedRows = rows.sort((a, b) => {
-                            const aX = parseFloat(a.cells[1].textContent);
-                            const bX = parseFloat(b.cells[1].textContent);
-                            return aX - bX;
+                // ヘッダー行をクリックすると、その列を基準に行単位で並び替える
+                let currentSortColumn = -1;
+                let sortOrder = 1; // 1: 昇順, -1: 降順
+                const tableHeaders = worldLandmarksTable.querySelectorAll("th");
+                for (const [i, header] of tableHeaders.entries()) {
+                    header.addEventListener("click", () => {
+                        // ヘッダー行のclassListをリセットする
+                        tableHeaders.forEach((header) => {
+                            header.classList.remove("sort-asc", "sort-desc");
                         });
-                        // 現在の並び順が昇順の場合は降順に、降順の場合は昇順に並び替える
-                        if (rows[0] === sortedRows[0]) {
-                            sortedRows.reverse();
-                            headerCell.innerHTML = headerCell.innerHTML.replace(/▼/, "▲");
+                        if (currentSortColumn === i) {
+                            sortOrder *= -1;
                         }
-                        // 並び替えた行をテーブルに追加する
-                        for (const row of sortedRows) {
+                        currentSortColumn = i;
+                        // 並び替えを行う
+                        header.classList.add(sortOrder === 1 ? "sort-asc" : "sort-desc");
+                        const rows = Array.from(worldLandmarksTable.querySelectorAll("tr")).slice(1);
+                        rows.sort((a, b) => {
+                            const aValue = a.querySelectorAll("td")[i].textContent;
+                            const bValue = b.querySelectorAll("td")[i].textContent;
+                            return sortOrder * aValue.localeCompare(bValue, undefined, { numeric: true });
+                        });
+                        for (const row of rows) {
                             worldLandmarksTable.appendChild(row);
                         }
                     });

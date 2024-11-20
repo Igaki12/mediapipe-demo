@@ -130,6 +130,13 @@ table td {
   border: 1px solid #ccc;
   padding: 8px;
 }
+th.sort-asc::after {
+  content: " ▲";
+}
+
+th.sort-desc::after {
+  content: " ▼";
+}
 /* input  type file のボタン */
 input[type="file"] button {
   background-color: #007f8b;
