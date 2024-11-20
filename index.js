@@ -142,7 +142,7 @@ FileSelector.addEventListener("change", (event) => {
             poseLandmarker.setOptions({ runningMode: "IMAGE" });
         }
         const allCanvas = SelectedImage.parentNode.getElementsByClassName("canvas");
-        poseLandmarker.detect(SelectedImage, async (result) => {
+         poseLandmarker.detect(SelectedImage, async (result) => {
             const canvas = document.createElement("canvas");
             canvas.setAttribute("class", "canvas");
             canvas.setAttribute("width", SelectedImage.naturalWidth + "px");
@@ -164,7 +164,7 @@ FileSelector.addEventListener("change", (event) => {
                 drawingUtils.drawLandmarks(landmark, {
                     radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
                 });
-                drawingUtils.drawConnectors(landmark, poseLandmarker.POSE_CONNECTIONS);
+                drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
 
 // [
 //     {
