@@ -370,8 +370,8 @@ FileSelector.addEventListener("change", (event) => {
                 y: shoulderCenter.y - (0.5 * hipLine.y * shoulderLength / hipLength),
                 z: shoulderCenter.z - (0.5 * hipLine.z * shoulderLength / hipLength)
             };
-            worldLandmarksPrint.innerHTML += `右肩 : x = ${Math.round(rightShoulderAfterAnalysis1.x * 1000) / 10}cm, y = ${Math.round(rightShoulderAfterAnalysis1.y * 1000) / 10}cm, z = ${Math.round(rightShoulderAfterAnalysis1.z * 1000) / 10}cm<br>`;
-            worldLandmarksPrint.innerHTML += `左肩 : x = ${Math.round(leftShoulderAfterAnalysis1.x * 1000) / 10}cm, y = ${Math.round(leftShoulderAfterAnalysis1.y * 1000) / 10}cm, z = ${Math.round(leftShoulderAfterAnalysis1.z * 1000) / 10}cm<br><br>`;
+            worldLandmarksPrint.innerHTML += `右肩 : Δx = ${Math.round((rightShoulderAfterAnalysis1.x - rightShoulder.x) * 1000) / 10}cm, Δy = ${Math.round((rightShoulderAfterAnalysis1.y - rightShoulder.y) * 1000) / 10}cm, Δz = ${Math.round((rightShoulderAfterAnalysis1.z - rightShoulder.z) * 1000) / 10}cm<br>`;
+            worldLandmarksPrint.innerHTML += `左肩 : x = ${Math.round((leftShoulderAfterAnalysis1.x - leftShoulder.x) * 1000) / 10}cm, Δy = ${Math.round((leftShoulderAfterAnalysis1.y - leftShoulder.y) * 1000) / 10}cm, Δz = ${Math.round((leftShoulderAfterAnalysis1.z - leftShoulder.z) * 1000) / 10}cm<br><br>`;
 
             // 同じ計算をlandmarksに対して行う
             const rightShoulderLandmark = result.worldLandmarks[0][12];
@@ -382,15 +382,16 @@ FileSelector.addEventListener("change", (event) => {
                 z: rightShoulderLandmark.z - leftShoulderLandmark.z
             };
             const shoulderLengthLandmark = Math.sqrt(shoulderLineLandmark.x ** 2 + shoulderLineLandmark.y ** 2 + shoulderLineLandmark.z ** 2);
+            const hipLengthLandmark = Math.sqrt(hipLine.x ** 2 + hipLine.y ** 2 + hipLine.z ** 2);
             const rightShoulderLandmarkAfter = {
-                x: shoulderCenter.x + (0.5 * hipLine.x * shoulderLengthLandmark / hipLength),
-                y: shoulderCenter.y + (0.5 * hipLine.y * shoulderLengthLandmark / hipLength),
-                z: shoulderCenter.z + (0.5 * hipLine.z * shoulderLengthLandmark / hipLength)
+                x: shoulderCenter.x + (0.5 * hipLine.x * shoulderLengthLandmark / hipLengthLandmark),
+                y: shoulderCenter.y + (0.5 * hipLine.y * shoulderLengthLandmark / hipLengthLandmark),
+                z: shoulderCenter.z + (0.5 * hipLine.z * shoulderLengthLandmark / hipLengthLandmark)
             };
             const leftShoulderLandmarkAfter = {
-                x: shoulderCenter.x - (0.5 * hipLine.x * shoulderLengthLandmark / hipLength),
-                y: shoulderCenter.y - (0.5 * hipLine.y * shoulderLengthLandmark / hipLength),
-                z: shoulderCenter.z - (0.5 * hipLine.z * shoulderLengthLandmark / hipLength)
+                x: shoulderCenter.x - (0.5 * hipLine.x * shoulderLengthLandmark / hipLengthLandmark),
+                y: shoulderCenter.y - (0.5 * hipLine.y * shoulderLengthLandmark / hipLengthLandmark),
+                z: shoulderCenter.z - (0.5 * hipLine.z * shoulderLengthLandmark / hipLengthLandmark)
             };
 
 // const drawingUtils = new DrawingUtils(canvasCtx);
