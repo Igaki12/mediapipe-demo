@@ -357,13 +357,55 @@ FileSelector.addEventListener("change", (event) => {
             worldLandmarksPrint.innerHTML += `cos(左右腰と左右肩のなす角度) = ${Math.round(cosTheta * 1000) / 1000}<br><br>`;
             worldLandmarksPrint.innerHTML += `これは角度として${Math.round(Math.acos(cosTheta) * 180 / Math.PI * 1000) / 1000}度に相当します。<br><br>`;
             worldLandmarksPrint.innerHTML += "左右の肩を腰の線に対して平行になるように修正してこの角度を0にすることで、立ち姿勢を正すことができます。<br><br>";
-            worldLandmarksPrint.innerHTML += "修正に必要な左の肩の移動量 (右の肩は固定したまま): <br>";
-            worldLandmarksPrint.innerHTML += `x = ${Math.round((hipLine.x - shoulderLine.x) * 1000) / 10}cm, `;
-            worldLandmarksPrint.innerHTML += `y = ${Math.round((hipLine.y - shoulderLine.y) * 1000) / 10}cm, `;
-            worldLandmarksPrint.innerHTML += `z = ${Math.round((hipLine.z - shoulderLine.z) * 1000) / 10}cm<br><br>`;
+            worldLandmarksPrint.innerHTML += "修正に必要な左右の肩の移動量(左右肩の中点と肩の長さを保ったまま、左右の肩を中点に対して回転させる): <br>";
+            const shoulderLength = Math.sqrt(shoulderLine.x ** 2 + shoulderLine.y ** 2 + shoulderLine.z ** 2);
+            const hipLength = Math.sqrt(hipLine.x ** 2 + hipLine.y ** 2 + hipLine.z ** 2);
+            const rightShoulderAfterAnalysis1 = {
+                x: shoulderCenter.x + (0.5 * hipLine.x * shoulderLength / hipLength),
+                y: shoulderCenter.y + (0.5 * hipLine.y * shoulderLength / hipLength),
+                z: shoulderCenter.z + (0.5 * hipLine.z * shoulderLength / hipLength)
+            };
+            const leftShoulderAfterAnalysis1 = {
+                x: shoulderCenter.x - (0.5 * hipLine.x * shoulderLength / hipLength),
+                y: shoulderCenter.y - (0.5 * hipLine.y * shoulderLength / hipLength),
+                z: shoulderCenter.z - (0.5 * hipLine.z * shoulderLength / hipLength)
+            };
+            worldLandmarksPrint.innerHTML += `右肩 : x = ${Math.round(rightShoulderAfterAnalysis1.x * 1000) / 10}cm, y = ${Math.round(rightShoulderAfterAnalysis1.y * 1000) / 10}cm, z = ${Math.round(rightShoulderAfterAnalysis1.z * 1000) / 10}cm<br>`;
+            worldLandmarksPrint.innerHTML += `左肩 : x = ${Math.round(leftShoulderAfterAnalysis1.x * 1000) / 10}cm, y = ${Math.round(leftShoulderAfterAnalysis1.y * 1000) / 10}cm, z = ${Math.round(leftShoulderAfterAnalysis1.z * 1000) / 10}cm<br><br>`;
 
+            // 同じ計算をlandmarksに対して行う
+            const rightShoulderLandmark = result.worldLandmarks[0][12];
+            const leftShoulderLandmark = result.worldLandmarks[0][11];
+            const shoulderLineLandmark = {
+                x: rightShoulderLandmark.x - leftShoulderLandmark.x,
+                y: rightShoulderLandmark.y - leftShoulderLandmark.y,
+                z: rightShoulderLandmark.z - leftShoulderLandmark.z
+            };
+            const shoulderLengthLandmark = Math.sqrt(shoulderLineLandmark.x ** 2 + shoulderLineLandmark.y ** 2 + shoulderLineLandmark.z ** 2);
+            const rightShoulderLandmarkAfter = {
+                x: shoulderCenter.x + (0.5 * hipLine.x * shoulderLengthLandmark / hipLength),
+                y: shoulderCenter.y + (0.5 * hipLine.y * shoulderLengthLandmark / hipLength),
+                z: shoulderCenter.z + (0.5 * hipLine.z * shoulderLengthLandmark / hipLength)
+            };
+            const leftShoulderLandmarkAfter = {
+                x: shoulderCenter.x - (0.5 * hipLine.x * shoulderLengthLandmark / hipLength),
+                y: shoulderCenter.y - (0.5 * hipLine.y * shoulderLengthLandmark / hipLength),
+                z: shoulderCenter.z - (0.5 * hipLine.z * shoulderLengthLandmark / hipLength)
+            };
 
-            // worldLandmarksPrint.innerHTML += "解析(4) : 腰の中点と肩の中点を結ぶ線が(立体的に)どの程度垂直かを求める<br>";
+// const drawingUtils = new DrawingUtils(canvasCtx);
+// for (const landmark of result.landmarks) {
+//     drawingUtils.drawLandmarks(landmark, {
+//         radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+//     });
+            // drawingUtilsに、ただした後の左右肩の位置を描画する
+            drawingUtils.drawLandmarks([rightShoulderLandmarkAfter, leftShoulderLandmarkAfter], {
+                // 色を変える
+                color: "red",
+                radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+            });
+            // drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+
             worldLandmarksPrint.innerHTML += "<h2>解析(4) : 腰の中点と肩の中点を結ぶ線が(立体的に)どの程度垂直かを求める</h2>";
             const hipShoulderLine = {
                 x: shoulderCenter.x - hipCenter.x,
@@ -376,80 +418,20 @@ FileSelector.addEventListener("change", (event) => {
             worldLandmarksPrint.innerHTML += `腰の中点と肩の中点を結ぶ線 : x = ${Math.round(hipShoulderLine.x * 1000) / 10}cm, y = ${Math.round(hipShoulderLine.y * 1000) / 10}cm, z = ${Math.round(hipShoulderLine.z * 1000) / 10}cm<br>`;
             worldLandmarksPrint.innerHTML += `cos(左右腰と腰の中点と肩の中点を結ぶ線のなす角度) = ${Math.round(cosTheta2 * 1000) / 1000}<br><br>`;
             worldLandmarksPrint.innerHTML += `これは角度として${Math.round(Math.acos(cosTheta2) * 180 / Math.PI * 1000) / 1000}度に相当します。<br><br>`;
-            worldLandmarksPrint.innerHTML += "腰の中点と肩の中点を結ぶ線を垂直にすることで、立ち姿勢のバランスを整えることができます。<br><br>";
-            worldLandmarksPrint.innerHTML += "修正に必要な左右の肩の平行移動量(両方の肩を同じ方向に移動させる): <br>";
-            // hipShoulderLineとhipLineの内積が0になるようなshoulderCenterの移動量を求める
-            worldLandmarksPrint.innerHTML += `x = ${Math.round((hipLine.x * hipShoulderLine.x / hipLineNorm) * 1000) / 10}cm, `;
-            worldLandmarksPrint.innerHTML += `y = ${Math.round((hipLine.y * hipShoulderLine.y / hipLineNorm) * 1000) / 10}cm, `;
-            worldLandmarksPrint.innerHTML += `z = ${Math.round((hipLine.z * hipShoulderLine.z / hipLineNorm) * 1000) / 10}cm<br><br>`;
+            worldLandmarksPrint.innerHTML += "腰の中点と肩の中点を結ぶ線を(=背骨を骨盤に対して)垂直にすることで、立ち姿勢のバランスを整えることができます。<br><br>";
+            worldLandmarksPrint.innerHTML += "背骨の長さを保ったまま、肩の中点を腰の中点に対して回転させることで、この角度を90度にすることができます。...<br><br>";
+            const shoulderHipLength = Math.sqrt((shoulderCenter.x - hipCenter.x) ** 2 + (shoulderCenter.y - hipCenter.y) ** 2 + (shoulderCenter.z - hipCenter.z) ** 2);
+
+
+
+
+
 
             worldLandmarksPrint.innerHTML += "<h2>結論</h2>";
-            worldLandmarksPrint.innerHTML += "立ち姿勢を正すためには、<br>";
-            worldLandmarksPrint.innerHTML += "右肩の移動量 : <br>";
-            worldLandmarksPrint.innerHTML += `右(X)方向に ${Math.round((hipLine.x * hipShoulderLine.x / hipLineNorm) * 1000) / 10}cm、`;
-            worldLandmarksPrint.innerHTML += `上(Y)方向に ${Math.round((hipLine.y * hipShoulderLine.y / hipLineNorm) * 1000) / 10}cm、`;
-            worldLandmarksPrint.innerHTML += `前(Z)方向に ${Math.round((hipLine.z * hipShoulderLine.z / hipLineNorm) * 1000) / 10}cm<br>`;
-            worldLandmarksPrint.innerHTML += "左肩の移動量 : <br>";
-            worldLandmarksPrint.innerHTML += `左(X)方向に ${Math.round(((hipLine.x - shoulderLine.x) + (hipLine.x * hipShoulderLine.x / hipLineNorm)) * 1000) / 10}cm、`;
-            worldLandmarksPrint.innerHTML += `下(Y)方向に ${Math.round(((hipLine.y - shoulderLine.y) + (hipLine.y * hipShoulderLine.y / hipLineNorm)) * 1000) / 10}cm、`;
-            worldLandmarksPrint.innerHTML += `正面前(Z)方向に ${Math.round(((hipLine.z - shoulderLine.z) + (hipLine.z * hipShoulderLine.z / hipLineNorm)) * 1000) / 10}cm<br>`;
-
-            // 結論の右肩の移動量をlandmark(0~1の数字)として計算する
+            worldLandmarksPrint.innerHTML += "立ち姿勢を正すためには...<br>";
 
 
-            const rightShoulderLandmark = result.landmarks[0][12];
-            const leftShoulderLandmark = result.landmarks[0][11];
-            const rightHipLandmark = result.landmarks[0][24];
-            const leftHipLandmark = result.landmarks[0][23];
-            const shoulderCenterLandmark = {
-                x: (rightShoulderLandmark.x + leftShoulderLandmark.x) / 2,
-                y: (rightShoulderLandmark.y + leftShoulderLandmark.y) / 2,
-                z: (rightShoulderLandmark.z + leftShoulderLandmark.z) / 2
-            };
-            const hipCenterLandmark = {
-                x: (rightHipLandmark.x + leftHipLandmark.x) / 2,
-                y: (rightHipLandmark.y + leftHipLandmark.y) / 2,
-                z: (rightHipLandmark.z + leftHipLandmark.z) / 2
-            };
-            const shoulderLineLandmark = {
-                x: rightShoulderLandmark.x - leftShoulderLandmark.x,
-                y: rightShoulderLandmark.y - leftShoulderLandmark.y,
-                z: rightShoulderLandmark.z - leftShoulderLandmark.z
-            };
-            const hipLineLandmark = {
-                x: rightHipLandmark.x - leftHipLandmark.x,
-                y: rightHipLandmark.y - leftHipLandmark.y,
-                z: rightHipLandmark.z - leftHipLandmark.z
-            };
-            const hipShoulderLineLandmark = {
-                x: shoulderCenterLandmark.x - hipCenterLandmark.x,
-                y: shoulderCenterLandmark.y - hipCenterLandmark.y,
-                z: shoulderCenterLandmark.z - hipCenterLandmark.z
-            };
-            // 結論の右肩の移動量をlandmarkとして計算する
-            const rightShoulderLandmarkAfter = {
-                x: rightShoulderLandmark.x + (hipLine.x * hipShoulderLine.x / hipLineNorm) + (hipLine.x * hipShoulderLine.x / hipLineNorm),
-                y: rightShoulderLandmark.y + (hipLine.y * hipShoulderLine.y / hipLineNorm) + (hipLine.y * hipShoulderLine.y / hipLineNorm),
-                z: rightShoulderLandmark.z + (hipLine.z * hipShoulderLine.z / hipLineNorm) + (hipLine.z * hipShoulderLine.z / hipLineNorm)
-            };
-            // 結論の左肩の移動量をlandmarkとして計算する
-            const leftShoulderLandmarkAfter = {
-                x: leftShoulderLandmark.x + (hipLine.x - shoulderLine.x) + (hipLine.x * hipShoulderLine.x / hipLineNorm),
-                y: leftShoulderLandmark.y + (hipLine.y - shoulderLine.y) + (hipLine.y * hipShoulderLine.y / hipLineNorm),
-                z: leftShoulderLandmark.z + (hipLine.z - shoulderLine.z) + (hipLine.z * hipShoulderLine.z / hipLineNorm)
-            };
-            // const drawingUtils = new DrawingUtils(canvasCtx);
-// for (const landmark of result.landmarks) {
-//     drawingUtils.drawLandmarks(landmark, {
-//         radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-//     });
-            // drawingUtilsに、ただした後の左右肩の位置を描画する
-            drawingUtils.drawLandmarks([rightShoulderLandmarkAfter, leftShoulderLandmarkAfter], {
-                // 色を変える
-                color: "red",
-                radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-            });
-            // drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+
         }
         );
     }
