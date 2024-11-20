@@ -272,11 +272,8 @@ FileSelector.addEventListener("change", (event) => {
     //   <tr><th>部位</th><th>X座標/左方向(cm)</th><th>Y座標/下方向(cm)</th><th>Z座標/正面前方向(cm)</th></tr>
     //   </table>
                 const worldLandmarksTable = document.getElementById("worldLandmarksTable");
-                // for (const [i, point] of result.worldLandmarks[0].entries()) {
-                //     worldLandmarksPrint.innerHTML += `${positionNamesJP[i]} : x = ${Math.round(point.x * 1000) / 10}cm, y = ${Math.round(point.y * 1000) / 10}cm, z = ${Math.round(point.z * 1000) / 10}cm<br>`;
-                // }
                 for (const [i, point] of result.worldLandmarks[0].entries()) {
-                    worldLandmarksTable.innerHTML += `<tr><td>${positionNamesJP[i]}</td><td>${Math.round(point.x * 1000) / 10}</td><td>${Math.round(point.y * 1000) / 10}</td><td>${Math.round(point.z * 1000) / 10}</td></tr>`;
+                    worldLandmarksTable.innerHTML += `<tr><td>${i+1}. ${positionNamesJP[i]}</td><td>${Math.round(point.x * 1000) / 10}</td><td>${Math.round(point.y * 1000) / 10}</td><td>${Math.round(point.z * 1000) / 10}</td></tr>`;
                 }
                 // worldLandmarksPrint.innerHTML += "解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める<br>";
                 worldLandmarksPrint.innerHTML += "<h2>解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める</h2>";
