@@ -294,6 +294,12 @@ FileSelector.addEventListener("change", (event) => {
                         header.classList.add(sortOrder === 1 ? "sort-asc" : "sort-desc");
                         const rows = Array.from(worldLandmarksTable.querySelectorAll("tr")).slice(1);
                         rows.sort((a, b) => {
+                            // １列目以外は数値として比較する
+                            if (i !== 0) {
+                                const aValue = parseFloat(a.querySelectorAll("td")[i].textContent);
+                                const bValue = parseFloat(b.querySelectorAll("td")[i].textContent);
+                                return sortOrder * (aValue - bValue);
+                            }
                             const aValue = a.querySelectorAll("td")[i].textContent;
                             const bValue = b.querySelectorAll("td")[i].textContent;
                             return sortOrder * aValue.localeCompare(bValue, undefined, { numeric: true });
