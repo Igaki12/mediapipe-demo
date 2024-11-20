@@ -163,6 +163,7 @@ FileSelector.addEventListener("change", (event) => {
                     radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
                 });
                 drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            }
                 console.log("result : ");
                 console.log(result);
                 // {
@@ -394,12 +395,13 @@ FileSelector.addEventListener("change", (event) => {
                 worldLandmarksPrint.innerHTML += `正面前(Z)方向に ${Math.round(((hipLine.z - shoulderLine.z) + (hipLine.z * hipShoulderLine.z / hipLineNorm)) * 1000) / 10}cm<br>`;
 
 
+                // drawingUtilsに、ただした後の位置を描画する関数を追加する
 
 
 
             }
-        })};
-        
+        );
+    }
 }
 );
 

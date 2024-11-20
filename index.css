@@ -138,7 +138,7 @@ th.sort-desc::after {
   content: " ▼";
 }
 /* input  type file のボタン */
-input[type="file"] button {
+input[type="file"] {
   background-color: #007f8b;
   color: #fff;
   border: none;
