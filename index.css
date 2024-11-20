@@ -130,13 +130,12 @@ table td {
   border: 1px solid #ccc;
   padding: 8px;
 }
-/* input のボタン */
-input[type="file"] {
+/* input  type file のボタン */
+input[type="file"] button {
   background-color: #007f8b;
   color: #fff;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  
 }
