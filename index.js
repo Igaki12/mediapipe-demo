@@ -443,8 +443,8 @@ FileSelector.addEventListener("change", (event) => {
             worldLandmarksPrint.innerHTML += `解析4で導き出された肩の中点 : Δx = ${Math.round((shoulderCenterAfterAnalysis2.x - shoulderCenter.x) * 1000) / 10}cm, Δy = ${Math.round((shoulderCenterAfterAnalysis2.y - shoulderCenter.y) * 1000) / 10}cm, Δz = ${Math.round((shoulderCenterAfterAnalysis2.z - shoulderCenter.z) * 1000) / 10}cm<br><br>`;
 
             // 同じ計算をlandmarksに対して行う
-            const rightAnkleLandmark = result.worldLandmarks[0][28];
-            const leftAnkleLandmark = result.worldLandmarks[0][27];
+            const rightAnkleLandmark = result.landmarks[0][28];
+            const leftAnkleLandmark = result.landmarks[0][27];
             const ankleLineLandmark = {
                 x: rightAnkleLandmark.x - leftAnkleLandmark.x,
                 y: rightAnkleLandmark.y - leftAnkleLandmark.y,
