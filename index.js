@@ -118,13 +118,12 @@ async function handleClick(event) {
 
 const FileSelector = document.getElementById("fileSelector");
 const SelectedImage = document.getElementById("selectedImage");
-const landmarksPrint = document.getElementById("landmarksPrint");
+const worldLandmarksPrint = document.getElementById("worldLandmarksPrint");
 FileSelector.addEventListener("change", (event) => {
     const file = event.target.files[0];
     if (!file) {
         return;
     }
-
     const reader = new FileReader();
     reader.onload = (e) => {
         SelectedImage.src = e.target.result;
@@ -214,7 +213,7 @@ FileSelector.addEventListener("change", (event) => {
 // 30 - right heel
 // 31 - left foot index
 // 32 - right foot index
-                landmarksPrint.innerHTML = "";
+                worldLandmarksPrint.innerHTML = "それぞれの点の座標(単位：メートル)<br>";
                 const positionNamesJP = [
                     "鼻",
                     "左目-内側",
@@ -251,9 +250,8 @@ FileSelector.addEventListener("change", (event) => {
                     "右足先"
                 ];
                 // 座標はx, y, zの3つの値で、それぞれ小数点以下3桁まで表示
-                for (const [i, point] of landmark.entries()) {
-                    landmarksPrint.innerHTML += `${positionNamesJP[i]} : x = ${point.x.toFixed(3)}, y = ${point.y.toFixed(3)}, z = ${point.z.toFixed(3)}<br>`;
-                    // landmarksPrint.innerHTML += `landmark ${i} : x = ${point.x.toFixed(3)}, y = ${point.y.toFixed(3)}, z = ${point.z.toFixed(3)}<br>`;
+                for (const [i, point] of result.worldLandmarks.entries()) {
+                    worldLandmarksPrint.innerHTML += `${positionNamesJP[i]} : x = ${point.x.toFixed(3)}, y = ${point.y.toFixed(3)}, z = ${point.z.toFixed(3)}<br>`;
                 }
             }
         })};
