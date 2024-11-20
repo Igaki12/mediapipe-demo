@@ -215,7 +215,7 @@ FileSelector.addEventListener("change", (event) => {
 // 31 - left foot index
 // 32 - right foot index
                 landmarksPrint.innerHTML = "";
-                positionNamesJP = [
+                const positionNamesJP = [
                     "鼻",
                     "左目-内側",
                     "左目",
