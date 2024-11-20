@@ -477,22 +477,16 @@ FileSelector.addEventListener("change", (event) => {
                 y: shoulderCenterAfterAnalysis2Landmark.y + (leftShoulderAfterAnalysis1Landmark.y - shoulderCenter.y),
                 z: shoulderCenterAfterAnalysis2Landmark.z + (leftShoulderAfterAnalysis1Landmark.z - shoulderCenter.z)
             };
-            // canvasに追記する
+            // canvasに半径2の赤い点を描画する
             const additionalCtx = canvas.getContext("2d");
-            const additionalDrawingUtils = new DrawingUtils(additionalCtx);
-            additionalDrawingUtils.drawLandmarks([rightShoulderAfterConclusion, leftShoulderAfterConclusion], {
-                color: "red",
-                radius: 5
-            });
-            // drawingUtils.drawLandmarks([rightShoulderLandmarkAfter.x, rightShoulderLandmarkAfter.y, rightShoulderLandmarkAfter.z], {
-            //     color: "red",
-            //     radius: 5
-            // });
-            // drawingUtils.drawLandmarks([leftShoulderLandmarkAfter.x, leftShoulderLandmarkAfter.y, leftShoulderLandmarkAfter.z], {
-            //     color: "red",
-            //     radius: 5
-            // });
-
+            additionalCtx.beginPath();
+            additionalCtx.arc(rightShoulderAfterConclusion.x * canvas.width, rightShoulderAfterConclusion.y * canvas.height, 2, 0, 2 * Math.PI);
+            additionalCtx.fillStyle = "red";
+            additionalCtx.fill();
+            additionalCtx.beginPath();
+            additionalCtx.arc(leftShoulderAfterConclusion.x * canvas.width, leftShoulderAfterConclusion.y * canvas.height, 2, 0, 2 * Math.PI);
+            additionalCtx.fillStyle = "red";
+            additionalCtx.fill();
 
         }
         );
