@@ -374,24 +374,36 @@ FileSelector.addEventListener("change", (event) => {
             worldLandmarksPrint.innerHTML += `左肩 : Δx = ${Math.round((leftShoulderAfterAnalysis1.x - leftShoulder.x) * 1000) / 10}cm, Δy = ${Math.round((leftShoulderAfterAnalysis1.y - leftShoulder.y) * 1000) / 10}cm, Δz = ${Math.round((leftShoulderAfterAnalysis1.z - leftShoulder.z) * 1000) / 10}cm<br><br>`;
 
             // 同じ計算をlandmarksに対して行う
-            const rightShoulderLandmark = result.worldLandmarks[0][12];
-            const leftShoulderLandmark = result.worldLandmarks[0][11];
+            const rightShoulderLandmark = result.landmarks[0][12];
+            const leftShoulderLandmark = result.landmarks[0][11];
+            const rightHipLandmark = result.landmarks[0][24];
+            const leftHipLandmark = result.landmarks[0][23];
             const shoulderLineLandmark = {
                 x: rightShoulderLandmark.x - leftShoulderLandmark.x,
                 y: rightShoulderLandmark.y - leftShoulderLandmark.y,
                 z: rightShoulderLandmark.z - leftShoulderLandmark.z
             };
             const shoulderLengthLandmark = Math.sqrt(shoulderLineLandmark.x ** 2 + shoulderLineLandmark.y ** 2 + shoulderLineLandmark.z ** 2);
-            const hipLengthLandmark = Math.sqrt(hipLine.x ** 2 + hipLine.y ** 2 + hipLine.z ** 2);
+            const hipLineLandmark = {
+                x: rightHipLandmark.x - leftHipLandmark.x,
+                y: rightHipLandmark.y - leftHipLandmark.y,
+                z: rightHipLandmark.z - leftHipLandmark.z
+            };
+            const hipLengthLandmark = Math.sqrt(hipLineLandmark.x ** 2 + hipLineLandmark.y ** 2 + hipLineLandmark.z ** 2);
+            const shoulderCenterLandmark = {
+                x: (leftShoulderLandmark.x + rightShoulderLandmark.x) / 2,
+                y: (leftShoulderLandmark.y + rightShoulderLandmark.y) / 2,
+                z: (leftShoulderLandmark.z + rightShoulderLandmark.z) / 2
+            };
             const rightShoulderAfterAnalysis1Landmark = {
-                x: shoulderCenter.x + (0.5 * hipLine.x * shoulderLengthLandmark / hipLengthLandmark),
-                y: shoulderCenter.y + (0.5 * hipLine.y * shoulderLengthLandmark / hipLengthLandmark),
-                z: shoulderCenter.z + (0.5 * hipLine.z * shoulderLengthLandmark / hipLengthLandmark)
+                x: shoulderCenterLandmark.x + (0.5 * hipLineLandmark.x * shoulderLengthLandmark / hipLengthLandmark),
+                y: shoulderCenterLandmark.y + (0.5 * hipLineLandmark.y * shoulderLengthLandmark / hipLengthLandmark),
+                z: shoulderCenterLandmark.z + (0.5 * hipLineLandmark.z * shoulderLengthLandmark / hipLengthLandmark)
             };
             const leftShoulderAfterAnalysis1Landmark = {
-                x: shoulderCenter.x - (0.5 * hipLine.x * shoulderLengthLandmark / hipLengthLandmark),
-                y: shoulderCenter.y - (0.5 * hipLine.y * shoulderLengthLandmark / hipLengthLandmark),
-                z: shoulderCenter.z - (0.5 * hipLine.z * shoulderLengthLandmark / hipLengthLandmark)
+                x: shoulderCenterLandmark.x - (0.5 * hipLineLandmark.x * shoulderLengthLandmark / hipLengthLandmark),
+                y: shoulderCenterLandmark.y - (0.5 * hipLineLandmark.y * shoulderLengthLandmark / hipLengthLandmark),
+                z: shoulderCenterLandmark.z - (0.5 * hipLineLandmark.z * shoulderLengthLandmark / hipLengthLandmark)
             };
 
 // const drawingUtils = new DrawingUtils(canvasCtx);
@@ -439,15 +451,26 @@ FileSelector.addEventListener("change", (event) => {
                 z: rightAnkleLandmark.z - leftAnkleLandmark.z
             };
             const hipAnkleLengthLandmark = Math.sqrt(ankleLineLandmark.x ** 2 + ankleLineLandmark.y ** 2 + ankleLineLandmark.z ** 2);
-            const hipAnkleLineLandmark = {
-                x: hipCenter.x - ankleCenter.x,
-                y: hipCenter.y - ankleCenter.y,
-                z: hipCenter.z - ankleCenter.z
+            const hipCenterLandmark = {
+                x: (leftHipLandmark.x + rightHipLandmark.x) / 2,
+                y: (leftHipLandmark.y + rightHipLandmark.y) / 2,
+                z: (leftHipLandmark.z + rightHipLandmark.z) / 2
             };
+            const ankleCenterLandmark = {
+                x: (leftAnkleLandmark.x + rightAnkleLandmark.x) / 2,
+                y: (leftAnkleLandmark.y + rightAnkleLandmark.y) / 2,
+                z: (leftAnkleLandmark.z + rightAnkleLandmark.z) / 2
+            };
+            const hipAnkleLineLandmark = {
+                x: hipCenterLandmark.x - ankleCenterLandmark.x,
+                y: hipCenterLandmark.y - ankleCenterLandmark.y,
+                z: hipCenterLandmark.z - ankleCenterLandmark.z
+            };
+            const spineLengthLandmark = Math.sqrt((shoulderCenterLandmark.x - hipCenterLandmark.x) ** 2 + (shoulderCenterLandmark.y - hipCenterLandmark.y) ** 2 + (shoulderCenterLandmark.z - hipCenterLandmark.z) ** 2);
             const shoulderCenterAfterAnalysis2Landmark = {
-                x: hipCenter.x + (hipAnkleLineLandmark.x * spineLength / hipAnkleLengthLandmark),
-                y: hipCenter.y + (hipAnkleLineLandmark.y * spineLength / hipAnkleLengthLandmark),
-                z: hipCenter.z + (hipAnkleLineLandmark.z * spineLength / hipAnkleLengthLandmark)
+                x: hipCenterLandmark.x + (hipAnkleLineLandmark.x * spineLengthLandmark / hipAnkleLengthLandmark),
+                y: hipCenterLandmark.y + (hipAnkleLineLandmark.y * spineLengthLandmark / hipAnkleLengthLandmark),
+                z: hipCenterLandmark.z + (hipAnkleLineLandmark.z * spineLengthLandmark / hipAnkleLengthLandmark)
             };
 
             worldLandmarksPrint.innerHTML += "<h2>結論</h2>";
@@ -468,17 +491,18 @@ FileSelector.addEventListener("change", (event) => {
 
             // 同じ計算をlandmarksに対して行う
             const rightShoulderAfterConclusionLandmark = {
-                x: shoulderCenterAfterAnalysis2Landmark.x + (rightShoulderAfterAnalysis1Landmark.x - shoulderCenter.x),
-                y: shoulderCenterAfterAnalysis2Landmark.y + (rightShoulderAfterAnalysis1Landmark.y - shoulderCenter.y),
-                z: shoulderCenterAfterAnalysis2Landmark.z + (rightShoulderAfterAnalysis1Landmark.z - shoulderCenter.z)
+                x: shoulderCenterAfterAnalysis2Landmark.x + (rightShoulderAfterAnalysis1Landmark.x - shoulderCenterLandmark.x),
+                y: shoulderCenterAfterAnalysis2Landmark.y + (rightShoulderAfterAnalysis1Landmark.y - shoulderCenterLandmark.y),
+                z: shoulderCenterAfterAnalysis2Landmark.z + (rightShoulderAfterAnalysis1Landmark.z - shoulderCenterLandmark.z)
             };
             const leftShoulderAfterConclusionLandmark = {
-                x: shoulderCenterAfterAnalysis2Landmark.x + (leftShoulderAfterAnalysis1Landmark.x - shoulderCenter.x),
-                y: shoulderCenterAfterAnalysis2Landmark.y + (leftShoulderAfterAnalysis1Landmark.y - shoulderCenter.y),
-                z: shoulderCenterAfterAnalysis2Landmark.z + (leftShoulderAfterAnalysis1Landmark.z - shoulderCenter.z)
+                x: shoulderCenterAfterAnalysis2Landmark.x + (leftShoulderAfterAnalysis1Landmark.x - shoulderCenterLandmark.x),
+                y: shoulderCenterAfterAnalysis2Landmark.y + (leftShoulderAfterAnalysis1Landmark.y - shoulderCenterLandmark.y),
+                z: shoulderCenterAfterAnalysis2Landmark.z + (leftShoulderAfterAnalysis1Landmark.z - shoulderCenterLandmark.z)
             };
+
             worldLandmarksPrint.innerHTML += `<br><br>画像に追加するための情報 : <br>右肩移動後 : x = ${Math.round(rightShoulderAfterConclusionLandmark.x * 1000) / 1000}, y = ${Math.round(rightShoulderAfterConclusionLandmark.y * 1000) / 1000}<br>`;
-            worldLandmarksPrint.innerHTML += `左肩移動後 : x = ${Math.round(leftShoulderAfterConclusionLandmark.x * 1000) / 10}, y = ${Math.round(leftShoulderAfterConclusionLandmark.y * 1000) / 1000}<br>`;
+            worldLandmarksPrint.innerHTML += `左肩移動後 : x = ${Math.round(leftShoulderAfterConclusionLandmark.x * 1000) / 1000}, y = ${Math.round(leftShoulderAfterConclusionLandmark.y * 1000) / 1000}<br>`;
             // canvasに半径2の赤い点を描画する
 // const canvas = document.createElement("canvas");
 // canvas.setAttribute("class", "canvas");
