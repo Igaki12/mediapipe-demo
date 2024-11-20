@@ -477,15 +477,13 @@ FileSelector.addEventListener("change", (event) => {
                 y: shoulderCenterAfterAnalysis2Landmark.y + (leftShoulderAfterAnalysis1Landmark.y - shoulderCenter.y),
                 z: shoulderCenterAfterAnalysis2Landmark.z + (leftShoulderAfterAnalysis1Landmark.z - shoulderCenter.z)
             };
-            // 画像に描画する
-            drawingUtils.drawLandmarks([rightShoulderAfterConclusion.x, rightShoulderAfterConclusion.y, rightShoulderAfterConclusion.z], {
+            // canvasに追記する
+            const additionalCtx = canvas.getContext("2d");
+            const additionalDrawingUtils = new DrawingUtils(additionalCtx);
+            additionalDrawingUtils.drawLandmarks([rightShoulderAfterConclusion, leftShoulderAfterConclusion], {
                 color: "red",
                 radius: 5
             });
-            drawingUtils.drawLandmarks([leftShoulderAfterConclusion.x, leftShoulderAfterConclusion.y, leftShoulderAfterConclusion.z], {
-                color: "red",
-                radius: 5
-            }); 
             // drawingUtils.drawLandmarks([rightShoulderLandmarkAfter.x, rightShoulderLandmarkAfter.y, rightShoulderLandmarkAfter.z], {
             //     color: "red",
             //     radius: 5
