@@ -131,11 +131,12 @@ table td {
   padding: 8px;
 }
 /* input のボタン */
-input[type="button"] {
+input[type="file"] {
   background-color: #007f8b;
   color: #fff;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  
 }
