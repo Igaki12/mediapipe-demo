@@ -268,12 +268,12 @@ FileSelector.addEventListener("change", (event) => {
                     "右足先 (right foot index)"
                 ];
                 // 座標はx, y, zの3つの値で、それぞれ小数点以下3桁まで表示
-                for (const [i, point] of result.worldLandmarks.entries()) {
+                for (const [i, point] of result.worldLandmarks[0].entries()) {
                     worldLandmarksPrint.innerHTML += `${positionNamesJP[i]} : x = ${Math.round(point.x * 1000) / 1000}m, y = ${Math.round(point.y * 1000) / 1000}m, z = ${Math.round(point.z * 1000) / 1000}m<br>`;
                 }
                 worldLandmarksPrint.innerHTML += "解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める<br>";
-                const leftHip = result.worldLandmarks[23];
-                const rightHip = result.worldLandmarks[24];
+                const leftHip = result.worldLandmarks[0][23];
+                const rightHip = result.worldLandmarks[0][24];
                 const hipCenter = {
                     x: (leftHip.x + rightHip.x) / 2,
                     y: (leftHip.y + rightHip.y) / 2,
@@ -283,8 +283,8 @@ FileSelector.addEventListener("change", (event) => {
                 worldLandmarksPrint.innerHTML += `右腰 : x = ${Math.round(rightHip.x * 1000) / 1000}m, y = ${Math.round(rightHip.y * 1000) / 1000}m, z = ${Math.round(rightHip.z * 1000) / 1000}m<br>`;
                 worldLandmarksPrint.innerHTML += `腰の中点 : x = ${Math.round(hipCenter.x * 1000) / 1000}m, y = ${Math.round(hipCenter.y * 1000) / 1000}m, z = ${Math.round(hipCenter.z * 1000) / 1000}m<br><br>`;
                 worldLandmarksPrint.innerHTML += "解析(2) : 肩の左右の座標と肩の中点の座標を求める<br>";
-                const leftShoulder = result.worldLandmarks[11];
-                const rightShoulder = result.worldLandmarks[12];
+                const leftShoulder = result.worldLandmarks[0][11];
+                const rightShoulder = result.worldLandmarks[0][12];
                 const shoulderCenter = {
                     x: (leftShoulder.x + rightShoulder.x) / 2,
                     y: (leftShoulder.y + rightShoulder.y) / 2,
