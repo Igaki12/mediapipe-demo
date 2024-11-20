@@ -346,6 +346,19 @@ FileSelector.addEventListener("change", (event) => {
                 worldLandmarksPrint.innerHTML += `y = ${Math.round((hipLine.y * hipShoulderLine.y / hipLineNorm) * 1000) / 10}cm, `;
                 worldLandmarksPrint.innerHTML += `z = ${Math.round((hipLine.z * hipShoulderLine.z / hipLineNorm) * 1000) / 10}cm<br><br>`;
 
+                worldLandmarksPrint.innerHTML += "<h2>結論</h2>";
+                worldLandmarksPrint.innerHTML += "立ち姿勢を正すためには、<br>";
+                worldLandmarksPrint.innerHTML += "右肩の移動量 : <br>";
+                worldLandmarksPrint.innerHTML += `右(X)方向に ${Math.round((hipLine.x * hipShoulderLine.x / hipLineNorm) * 1000) / 10}cm、`;
+                worldLandmarksPrint.innerHTML += `上(Y)方向に ${Math.round((hipLine.y * hipShoulderLine.y / hipLineNorm) * 1000) / 10}cm、`;
+                worldLandmarksPrint.innerHTML += `前(Z)方向に ${Math.round((hipLine.z * hipShoulderLine.z / hipLineNorm) * 1000) / 10}cm<br>`;
+                worldLandmarksPrint.innerHTML += "左肩の移動量 : <br>";
+                worldLandmarksPrint.innerHTML += `右(X)方向に ${Math.round(((hipLine.x - shoulderLine.x) + (hipLine.x * hipShoulderLine.x / hipLineNorm)) * 1000) / 10}cm、`;
+                worldLandmarksPrint.innerHTML += `上(Y)方向に ${Math.round(((hipLine.y - shoulderLine.y) + (hipLine.y * hipShoulderLine.y / hipLineNorm)) * 1000) / 10}cm、`;
+                worldLandmarksPrint.innerHTML += `前(Z)方向に ${Math.round(((hipLine.z - shoulderLine.z) + (hipLine.z * hipShoulderLine.z / hipLineNorm)) * 1000) / 10}cm<br>`;
+
+
+
 
 
             }
