@@ -231,10 +231,7 @@ FileSelector.addEventListener("change", (event) => {
 // 30 - right heel
 // 31 - left foot index
 // 32 - right foot index
-                // worldLandmarksPrint.innerHTML = "33点の座標(単位：センチメートル)<br>X軸は腰の中心から右方向、Y軸は腰の中心から上方向、Z軸は腰の中心から前方向を示します。<br><br>";
-                worldLandmarksPrint.innerHTML = "<h2>33点の座標(単位：センチメートル)</h2>";
-                worldLandmarksPrint.innerHTML += "X軸は腰の中心から左方向、Y軸は腰の中心から下方向、Z軸は腰の中心から正面前方向を示します。<br><br>";
-                worldLandmarksPrint.innerHTML += "点の読み取りについては、Google Mediapipeの公式ドキュメントを参照してください : <a href='https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker?hl=ja' target='_blank'>https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker?hl=ja</a><br><br>";
+                worldLandmarksPrint.innerHTML = "";
                 const positionNamesJP = [
                     "鼻 (nose)",
                     "左目-内側 (left eye - inner)",
@@ -270,15 +267,17 @@ FileSelector.addEventListener("change", (event) => {
                     "左足先 (left foot index)",
                     "右足先 (right foot index)"
                 ];
-                worldLandmarksPrint.innerHTML += `<table border="1"><tbody><tr><th>部位</th><th>X座標/左方向(cm)</th><th>Y座標/下方向(cm)</th><th>Z座標/正面前方向(cm)</th></tr>`;
-                // 座標はx, y, zの3つの値で、それぞれ小数点以下3桁までテーブルで表示
+                // 座標はx, y, zの3つの値で、それぞれ小数点以下3桁までテーブルで追加する
+    //     <table id="worldLandmarksTable">
+    //   <tr><th>部位</th><th>X座標/左方向(cm)</th><th>Y座標/下方向(cm)</th><th>Z座標/正面前方向(cm)</th></tr>
+    //   </table>
+                const worldLandmarksTable = document.getElementById("worldLandmarksTable");
                 // for (const [i, point] of result.worldLandmarks[0].entries()) {
                 //     worldLandmarksPrint.innerHTML += `${positionNamesJP[i]} : x = ${Math.round(point.x * 1000) / 10}cm, y = ${Math.round(point.y * 1000) / 10}cm, z = ${Math.round(point.z * 1000) / 10}cm<br>`;
                 // }
                 for (const [i, point] of result.worldLandmarks[0].entries()) {
-                    worldLandmarksPrint.innerHTML += `<tr><td>${positionNamesJP[i]}</td><td>${Math.round(point.x * 1000) / 10}</td><td>${Math.round(point.y * 1000) / 10}</td><td>${Math.round(point.z * 1000) / 10}</td></tr>`;
+                    worldLandmarksTable.innerHTML += `<tr><td>${positionNamesJP[i]}</td><td>${Math.round(point.x * 1000) / 10}</td><td>${Math.round(point.y * 1000) / 10}</td><td>${Math.round(point.z * 1000) / 10}</td></tr>`;
                 }
-                worldLandmarksPrint.innerHTML += `</tbody></table><br><br>`;
                 // worldLandmarksPrint.innerHTML += "解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める<br>";
                 worldLandmarksPrint.innerHTML += "<h2>解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める</h2>";
                 const leftHip = result.worldLandmarks[0][23];
