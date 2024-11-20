@@ -213,46 +213,102 @@ FileSelector.addEventListener("change", (event) => {
 // 30 - right heel
 // 31 - left foot index
 // 32 - right foot index
-                worldLandmarksPrint.innerHTML = "それぞれの点の座標(単位：メートル)<br>";
+                worldLandmarksPrint.innerHTML = "33点の座標(単位：メートル)<br>";
                 const positionNamesJP = [
-                    "鼻",
-                    "左目-内側",
-                    "左目",
-                    "左目-外側",
-                    "右目-内側",
-                    "右目",
-                    "右目-外側",
-                    "左耳",
-                    "右耳",
-                    "口-左縁",
-                    "口-右縁",
-                    "左肩",
-                    "右肩",
-                    "左肘",
-                    "右肘",
-                    "左手首",
-                    "右手首",
-                    "左小指",
-                    "右小指",
-                    "左人差し指",
-                    "右人差し指",
-                    "左親指",
-                    "右親指",
-                    "左尻",
-                    "右尻",
-                    "左膝",
-                    "右膝",
-                    "左足首",
-                    "右足首",
-                    "左かかと",
-                    "右かかと",
-                    "左足先",
-                    "右足先"
+                    "鼻 (nose)",
+                    "左目-内側 (left eye - inner)",
+                    "左目 (left eye)",
+                    "左目-外側 (left eye - outer)",
+                    "右目-内側 (right eye - inner)",
+                    "右目 (right eye)",
+                    "右目-外側 (right eye - outer)",
+                    "左耳 (left ear)",
+                    "右耳 (right ear)",
+                    "口-左縁 (mouth - left)",
+                    "口-右縁 (mouth - right)",
+                    "左肩 (left shoulder)",
+                    "右肩 (right shoulder)",
+                    "左肘 (left elbow)",
+                    "右肘 (right elbow)",
+                    "左手首 (left wrist)",
+                    "右手首 (right wrist)",
+                    "左小指 (left pinky)",
+                    "右小指 (right pinky)",
+                    "左人差し指 (left index)",
+                    "右人差し指 (right index)",
+                    "左親指 (left thumb)",
+                    "右親指 (right thumb)",
+                    "左腰 (left hip)",
+                    "右腰 (right hip)",
+                    "左膝 (left knee)",
+                    "右膝 (right knee)",
+                    "左足首 (left ankle)",
+                    "右足首 (right ankle)",
+                    "左かかと (left heel)",
+                    "右かかと (right heel)",
+                    "左足先 (left foot index)",
+                    "右足先 (right foot index)"
                 ];
                 // 座標はx, y, zの3つの値で、それぞれ小数点以下3桁まで表示
                 for (const [i, point] of result.worldLandmarks.entries()) {
-                    worldLandmarksPrint.innerHTML += `${positionNamesJP[i]} : x = ${point.x.toFixed(3)}, y = ${point.y.toFixed(3)}, z = ${point.z.toFixed(3)}<br>`;
+                    worldLandmarksPrint.innerHTML += `${positionNamesJP[i]} : x = ${point.x.toFixed(3)}m, y = ${point.y.toFixed(3)}m, z = ${point.z.toFixed(3)}m<br><br>`;
                 }
+                worldLandmarksPrint.innerHTML += "解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める<br>";
+                const leftHip = result.worldLandmarks[23];
+                const rightHip = result.worldLandmarks[24];
+                const hipCenter = {
+                    x: (leftHip.x + rightHip.x) / 2,
+                    y: (leftHip.y + rightHip.y) / 2,
+                    z: (leftHip.z + rightHip.z) / 2
+                };
+                worldLandmarksPrint.innerHTML += `左腰 : x = ${leftHip.x.toFixed(3)}m, y = ${leftHip.y.toFixed(3)}m, z = ${leftHip.z.toFixed(3)}m<br>`;
+                worldLandmarksPrint.innerHTML += `右腰 : x = ${rightHip.x.toFixed(3)}m, y = ${rightHip.y.toFixed(3)}m, z = ${rightHip.z.toFixed(3)}m<br>`;
+                worldLandmarksPrint.innerHTML += `腰の中点 : x = ${hipCenter.x.toFixed(3)}m, y = ${hipCenter.y.toFixed(3)}m, z = ${hipCenter.z.toFixed(3)}m<br><br>`;
+                worldLandmarksPrint.innerHTML += "解析(2) : 肩の左右の座標と肩の中点の座標を求める<br>";
+                const leftShoulder = result.worldLandmarks[11];
+                const rightShoulder = result.worldLandmarks[12];
+                const shoulderCenter = {
+                    x: (leftShoulder.x + rightShoulder.x) / 2,
+                    y: (leftShoulder.y + rightShoulder.y) / 2,
+                    z: (leftShoulder.z + rightShoulder.z) / 2
+                };
+                worldLandmarksPrint.innerHTML += `左肩 : x = ${leftShoulder.x.toFixed(3)}m, y = ${leftShoulder.y.toFixed(3)}m, z = ${leftShoulder.z.toFixed(3)}m<br>`;
+                worldLandmarksPrint.innerHTML += `右肩 : x = ${rightShoulder.x.toFixed(3)}m, y = ${rightShoulder.y.toFixed(3)}m, z = ${rightShoulder.z.toFixed(3)}m<br>`;
+                worldLandmarksPrint.innerHTML += `肩の中点 : x = ${shoulderCenter.x.toFixed(3)}m, y = ${shoulderCenter.y.toFixed(3)}m, z = ${shoulderCenter.z.toFixed(3)}m<br><br>`;
+                worldLandmarksPrint.innerHTML += "解析(3) : 左右腰を結ぶ線と左右肩を結ぶ線が(立体的に)どの程度平行かを求める<br>";
+                const hipLine = {
+                    x: rightHip.x - leftHip.x,
+                    y: rightHip.y - leftHip.y,
+                    z: rightHip.z - leftHip.z
+                };
+                const shoulderLine = {
+                    x: rightShoulder.x - leftShoulder.x,
+                    y: rightShoulder.y - leftShoulder.y,
+                    z: rightShoulder.z - leftShoulder.z
+                };
+                const innerProduct = hipLine.x * shoulderLine.x + hipLine.y * shoulderLine.y + hipLine.z * shoulderLine.z;
+                const hipLineNorm = Math.sqrt(hipLine.x ** 2 + hipLine.y ** 2 + hipLine.z ** 2);
+                const shoulderLineNorm = Math.sqrt(shoulderLine.x ** 2 + shoulderLine.y ** 2 + shoulderLine.z ** 2);
+                const cosTheta = innerProduct / (hipLineNorm * shoulderLineNorm);
+                worldLandmarksPrint.innerHTML += `左右腰を結ぶ線 : x = ${hipLine.x.toFixed(3)}m, y = ${hipLine.y.toFixed(3)}m, z = ${hipLine.z.toFixed(3)}m<br>`;
+                worldLandmarksPrint.innerHTML += `左右肩を結ぶ線 : x = ${shoulderLine.x.toFixed(3)}m, y = ${shoulderLine.y.toFixed(3)}m, z = ${shoulderLine.z.toFixed(3)}m<br>`;
+                worldLandmarksPrint.innerHTML += `cos(左右腰と左右肩のなす角度) = ${cosTheta.toFixed(3)}<br><br>`;
+                worldLandmarksPrint.innerHTML += `これは角度として${Math.acos(cosTheta) * 180 / Math.PI}度に相当します。<br><br>`;
+                worldLandmarksPrint.innerHTML += "解析(4) : 腰の中点と肩の中点を結ぶ線が(立体的に)どの程度垂直かを求める<br>";
+                const hipShoulderLine = {
+                    x: shoulderCenter.x - hipCenter.x,
+                    y: shoulderCenter.y - hipCenter.y,
+                    z: shoulderCenter.z - hipCenter.z
+                };
+                const innerProduct2 = hipLine.x * hipShoulderLine.x + hipLine.y * hipShoulderLine.y + hipLine.z * hipShoulderLine.z;
+                const hipShoulderLineNorm = Math.sqrt(hipShoulderLine.x ** 2 + hipShoulderLine.y ** 2 + hipShoulderLine.z ** 2);
+                const cosTheta2 = innerProduct2 / (hipLineNorm * hipShoulderLineNorm);
+                worldLandmarksPrint.innerHTML += `腰の中点と肩の中点を結ぶ線 : x = ${hipShoulderLine.x.toFixed(3)}m, y = ${hipShoulderLine.y.toFixed(3)}m, z = ${hipShoulderLine.z.toFixed(3)}m<br>`;
+                worldLandmarksPrint.innerHTML += `cos(左右腰と腰の中点と肩の中点を結ぶ線のなす角度) = ${cosTheta2.toFixed(3)}<br><br>`;
+                worldLandmarksPrint.innerHTML += `これは角度として${Math.acos(cosTheta2) * 180 / Math.PI}度に相当します。<br><br>`;
+
+
+
             }
         })};
         
