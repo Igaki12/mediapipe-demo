@@ -278,7 +278,7 @@ FileSelector.addEventListener("change", (event) => {
                 for (const [i, point] of result.worldLandmarks[0].entries()) {
                     worldLandmarksPrint.innerHTML += `<tr><td>${positionNamesJP[i]}</td><td>${Math.round(point.x * 1000) / 10}</td><td>${Math.round(point.y * 1000) / 10}</td><td>${Math.round(point.z * 1000) / 10}</td></tr>`;
                 }
-                worldLandmarksPrint.innerHTML += "</table><br><br>";
+                worldLandmarksPrint.innerHTML += `</table><br><br>`;
                 // worldLandmarksPrint.innerHTML += "解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める<br>";
                 worldLandmarksPrint.innerHTML += "<h2>解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める</h2>";
                 const leftHip = result.worldLandmarks[0][23];
