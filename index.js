@@ -480,14 +480,14 @@ FileSelector.addEventListener("change", (event) => {
             // canvasに半径2の赤い点を描画する
             const additionalCtx = canvas.getContext("2d");
             additionalCtx.beginPath();
-            additionalCtx.arc(rightShoulderAfterConclusion.x * canvas.width, rightShoulderAfterConclusion.y * canvas.height, 2, 0, 2 * Math.PI);
+            additionalCtx.arc(rightShoulderAfterConclusionLandmark.x * canvas.style.width, rightShoulderAfterConclusionLandmark.y * canvas.style.height, 2, 0, 2 * Math.PI);
             additionalCtx.fillStyle = "red";
             additionalCtx.fill();
             additionalCtx.beginPath();
-            additionalCtx.arc(leftShoulderAfterConclusion.x * canvas.width, leftShoulderAfterConclusion.y * canvas.height, 2, 0, 2 * Math.PI);
+            additionalCtx.arc(leftShoulderAfterConclusionLandmark.x * canvas.style.width, leftShoulderAfterConclusionLandmark.y * canvas.style.height, 2, 0, 2 * Math.PI);
             additionalCtx.fillStyle = "red";
             additionalCtx.fill();
-
+            
         }
         );
     }
