@@ -501,8 +501,8 @@ FileSelector.addEventListener("change", (event) => {
                 z: shoulderCenterAfterAnalysis2Landmark.z + (leftShoulderAfterAnalysis1Landmark.z - shoulderCenterLandmark.z)
             };
 
-            worldLandmarksPrint.innerHTML += `<br><br>画像に追加するための情報 : <br>右肩移動後 : x = ${Math.round(rightShoulderAfterConclusionLandmark.x * 1000) / 1000}, y = ${Math.round(rightShoulderAfterConclusionLandmark.y * 1000) / 1000}<br>`;
-            worldLandmarksPrint.innerHTML += `左肩移動後 : x = ${Math.round(leftShoulderAfterConclusionLandmark.x * 1000) / 1000}, y = ${Math.round(leftShoulderAfterConclusionLandmark.y * 1000) / 1000}<br>`;
+            worldLandmarksPrint.innerHTML += `<br><br>画像に追加するための情報 : <br>右肩移動後 : x = ${Math.round(rightShoulderAfterConclusionLandmark.x * 1000) / 1000}, y = ${Math.round(rightShoulderAfterConclusionLandmark.y * 1000) / 1000}, z = ${Math.round(rightShoulderAfterConclusionLandmark.z * 1000) / 1000}<br>`;
+            worldLandmarksPrint.innerHTML += `左肩移動後 : x = ${Math.round(leftShoulderAfterConclusionLandmark.x * 1000) / 1000}, y = ${Math.round(leftShoulderAfterConclusionLandmark.y * 1000) / 1000}, z = ${Math.round(leftShoulderAfterConclusionLandmark.z * 1000) / 1000}<br>`;
             // canvasに半径2の赤い点を描画する
 // const canvas = document.createElement("canvas");
 // canvas.setAttribute("class", "canvas");
@@ -538,7 +538,7 @@ FileSelector.addEventListener("change", (event) => {
             const additionalDrawingUtils = new DrawingUtils(additionalCanvasCtx);
             additionalDrawingUtils.drawLandmarks([rightShoulderAfterConclusionLandmark, leftShoulderAfterConclusionLandmark], {
                 color: "red",
-                radius: 2
+                radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
             });
 
         }
