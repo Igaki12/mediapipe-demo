@@ -231,7 +231,9 @@ FileSelector.addEventListener("change", (event) => {
 // 30 - right heel
 // 31 - left foot index
 // 32 - right foot index
-                worldLandmarksPrint.innerHTML = "33点の座標(単位：センチメートル)<br>X軸は腰の中心から右方向、Y軸は腰の中心から上方向、Z軸は腰の中心から前方向を示します。<br><br>";
+                // worldLandmarksPrint.innerHTML = "33点の座標(単位：センチメートル)<br>X軸は腰の中心から右方向、Y軸は腰の中心から上方向、Z軸は腰の中心から前方向を示します。<br><br>";
+                worldLandmarksPrint.innerHTML = "<h2>33点の座標(単位：センチメートル)</h2>";
+                worldLandmarksPrint.innerHTML += "X軸は腰の中心から右方向、Y軸は腰の中心から上方向、Z軸は腰の中心から前方向を示します。<br><br>";
                 worldLandmarksPrint.innerHTML += "点の読み取りについては、Google Mediapipeの公式ドキュメントを参照してください : <a href='https://https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker?hl=ja' target='_blank'>https://https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker?hl=ja</a><br><br>";
                 const positionNamesJP = [
                     "鼻 (nose)",
