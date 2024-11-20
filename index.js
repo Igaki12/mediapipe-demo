@@ -477,6 +477,8 @@ FileSelector.addEventListener("change", (event) => {
                 y: shoulderCenterAfterAnalysis2Landmark.y + (leftShoulderAfterAnalysis1Landmark.y - shoulderCenter.y),
                 z: shoulderCenterAfterAnalysis2Landmark.z + (leftShoulderAfterAnalysis1Landmark.z - shoulderCenter.z)
             };
+            worldLandmarksPrint.innerHTML += `<br><br>画像に追加するための情報 : <br>右肩移動後 : x = ${Math.round(rightShoulderAfterConclusionLandmark.x * 1000) / 10}, y = ${Math.round(rightShoulderAfterConclusionLandmark.y * 1000) / 10}<br>`;
+            worldLandmarksPrint.innerHTML += `左肩移動後 : x = ${Math.round(leftShoulderAfterConclusionLandmark.x * 1000) / 10}, y = ${Math.round(leftShoulderAfterConclusionLandmark.y * 1000) / 10}<br>`;
             // canvasに半径2の赤い点を描画する
             const additionalCtx = canvas.getContext("2d");
             additionalCtx.beginPath();
@@ -487,7 +489,7 @@ FileSelector.addEventListener("change", (event) => {
             additionalCtx.arc(leftShoulderAfterConclusionLandmark.x * canvas.style.width, leftShoulderAfterConclusionLandmark.y * canvas.style.height, 2, 0, 2 * Math.PI);
             additionalCtx.fillStyle = "red";
             additionalCtx.fill();
-            
+
         }
         );
     }
