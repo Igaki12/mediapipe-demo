@@ -383,12 +383,12 @@ FileSelector.addEventListener("change", (event) => {
             };
             const shoulderLengthLandmark = Math.sqrt(shoulderLineLandmark.x ** 2 + shoulderLineLandmark.y ** 2 + shoulderLineLandmark.z ** 2);
             const hipLengthLandmark = Math.sqrt(hipLine.x ** 2 + hipLine.y ** 2 + hipLine.z ** 2);
-            const rightShoulderLandmarkAfter = {
+            const rightShoulderAfterAnalysis1Landmark = {
                 x: shoulderCenter.x + (0.5 * hipLine.x * shoulderLengthLandmark / hipLengthLandmark),
                 y: shoulderCenter.y + (0.5 * hipLine.y * shoulderLengthLandmark / hipLengthLandmark),
                 z: shoulderCenter.z + (0.5 * hipLine.z * shoulderLengthLandmark / hipLengthLandmark)
             };
-            const leftShoulderLandmarkAfter = {
+            const leftShoulderAfterAnalysis1Landmark = {
                 x: shoulderCenter.x - (0.5 * hipLine.x * shoulderLengthLandmark / hipLengthLandmark),
                 y: shoulderCenter.y - (0.5 * hipLine.y * shoulderLengthLandmark / hipLengthLandmark),
                 z: shoulderCenter.z - (0.5 * hipLine.z * shoulderLengthLandmark / hipLengthLandmark)
@@ -400,14 +400,7 @@ FileSelector.addEventListener("change", (event) => {
 //         radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
 //     });
             // drawingUtilsに、ただした後の左右肩の位置を描画する
-            drawingUtils.drawLandmarks([rightShoulderLandmarkAfter.x, rightShoulderLandmarkAfter.y, rightShoulderLandmarkAfter.z], {
-                color: "red",
-                radius: 5
-            });
-            drawingUtils.drawLandmarks([leftShoulderLandmarkAfter.x, leftShoulderLandmarkAfter.y, leftShoulderLandmarkAfter.z], {
-                color: "red",
-                radius: 5
-            });
+
             // drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
 
             worldLandmarksPrint.innerHTML += "<h2>解析(4) : 左右の肩を結ぶ線の中点が重心と一致するかを確認する</h2>";
@@ -438,7 +431,24 @@ FileSelector.addEventListener("change", (event) => {
             worldLandmarksPrint.innerHTML += `解析4で導き出された肩の中点 : Δx = ${Math.round((shoulderCenterAfterAnalysis2.x - shoulderCenter.x) * 1000) / 10}cm, Δy = ${Math.round((shoulderCenterAfterAnalysis2.y - shoulderCenter.y) * 1000) / 10}cm, Δz = ${Math.round((shoulderCenterAfterAnalysis2.z - shoulderCenter.z) * 1000) / 10}cm<br><br>`;
 
             // 同じ計算をlandmarksに対して行う
-
+            const rightAnkleLandmark = result.worldLandmarks[0][28];
+            const leftAnkleLandmark = result.worldLandmarks[0][27];
+            const ankleLineLandmark = {
+                x: rightAnkleLandmark.x - leftAnkleLandmark.x,
+                y: rightAnkleLandmark.y - leftAnkleLandmark.y,
+                z: rightAnkleLandmark.z - leftAnkleLandmark.z
+            };
+            const hipAnkleLengthLandmark = Math.sqrt(ankleLineLandmark.x ** 2 + ankleLineLandmark.y ** 2 + ankleLineLandmark.z ** 2);
+            const hipAnkleLineLandmark = {
+                x: hipCenter.x - ankleCenter.x,
+                y: hipCenter.y - ankleCenter.y,
+                z: hipCenter.z - ankleCenter.z
+            };
+            const shoulderCenterAfterAnalysis2Landmark = {
+                x: hipCenter.x + (hipAnkleLineLandmark.x * spineLength / hipAnkleLengthLandmark),
+                y: hipCenter.y + (hipAnkleLineLandmark.y * spineLength / hipAnkleLengthLandmark),
+                z: hipCenter.z + (hipAnkleLineLandmark.z * spineLength / hipAnkleLengthLandmark)
+            };
 
             worldLandmarksPrint.innerHTML += "<h2>結論</h2>";
             worldLandmarksPrint.innerHTML += "解析4で求めた肩の中点の移動量と、解析3で求めた両方の肩それぞれの移動量を合計することで、立ち姿勢を正すための肩の移動量を求めることができます。<br>";
@@ -457,7 +467,33 @@ FileSelector.addEventListener("change", (event) => {
             worldLandmarksPrint.innerHTML += "これらの移動量を元に、立ち姿勢を正すことができます。<br>";
 
             // 同じ計算をlandmarksに対して行う
-
+            const rightShoulderAfterConclusionLandmark = {
+                x: shoulderCenterAfterAnalysis2Landmark.x + (rightShoulderAfterAnalysis1Landmark.x - shoulderCenter.x),
+                y: shoulderCenterAfterAnalysis2Landmark.y + (rightShoulderAfterAnalysis1Landmark.y - shoulderCenter.y),
+                z: shoulderCenterAfterAnalysis2Landmark.z + (rightShoulderAfterAnalysis1Landmark.z - shoulderCenter.z)
+            };
+            const leftShoulderAfterConclusionLandmark = {
+                x: shoulderCenterAfterAnalysis2Landmark.x + (leftShoulderAfterAnalysis1Landmark.x - shoulderCenter.x),
+                y: shoulderCenterAfterAnalysis2Landmark.y + (leftShoulderAfterAnalysis1Landmark.y - shoulderCenter.y),
+                z: shoulderCenterAfterAnalysis2Landmark.z + (leftShoulderAfterAnalysis1Landmark.z - shoulderCenter.z)
+            };
+            // 画像に描画する
+            drawingUtils.drawLandmarks([rightShoulderAfterConclusion.x, rightShoulderAfterConclusion.y, rightShoulderAfterConclusion.z], {
+                color: "red",
+                radius: 5
+            });
+            drawingUtils.drawLandmarks([leftShoulderAfterConclusion.x, leftShoulderAfterConclusion.y, leftShoulderAfterConclusion.z], {
+                color: "red",
+                radius: 5
+            }); 
+            // drawingUtils.drawLandmarks([rightShoulderLandmarkAfter.x, rightShoulderLandmarkAfter.y, rightShoulderLandmarkAfter.z], {
+            //     color: "red",
+            //     radius: 5
+            // });
+            // drawingUtils.drawLandmarks([leftShoulderLandmarkAfter.x, leftShoulderLandmarkAfter.y, leftShoulderLandmarkAfter.z], {
+            //     color: "red",
+            //     radius: 5
+            // });
 
 
         }
