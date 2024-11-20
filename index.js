@@ -231,7 +231,7 @@ FileSelector.addEventListener("change", (event) => {
 // 30 - right heel
 // 31 - left foot index
 // 32 - right foot index
-                worldLandmarksPrint.innerHTML = "";
+                
                 const positionNamesJP = [
                     "鼻 (nose)",
                     "左目-内側 (left eye - inner)",
@@ -275,7 +275,38 @@ FileSelector.addEventListener("change", (event) => {
                 for (const [i, point] of result.worldLandmarks[0].entries()) {
                     worldLandmarksTable.innerHTML += `<tr><td>${i+1}. ${positionNamesJP[i]}</td><td>${Math.round(point.x * 1000) / 10}</td><td>${Math.round(point.y * 1000) / 10}</td><td>${Math.round(point.z * 1000) / 10}</td></tr>`;
                 }
-                // worldLandmarksPrint.innerHTML += "解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める<br>";
+                // worldLandmarksTableの各列について、行の並び替え機能を追加する
+                // 1行目はヘッダー行なので、2行目以降を対象にする
+                for (let i = 1; i < worldLandmarksTable.rows.length; i++) {
+                    worldLandmarksTable.rows[i].addEventListener("click", () => {
+                        // ヘッダー行の項目に、並び替えのための矢印を追加する
+                        const headerCells = worldLandmarksTable.rows[0].cells;
+                        for (const cell of headerCells) {
+                            cell.innerHTML = cell.innerHTML.replace(/▲|▼/, "");
+                        }
+                        const headerCell = worldLandmarksTable.rows[0].cells[i];
+                        headerCell.innerHTML += "▼";
+                        // 並び替えを行う
+                        const rows = Array.from(worldLandmarksTable.rows).slice(1);
+                        const sortedRows = rows.sort((a, b) => {
+                            const aX = parseFloat(a.cells[1].textContent);
+                            const bX = parseFloat(b.cells[1].textContent);
+                            return aX - bX;
+                        });
+                        // 現在の並び順が昇順の場合は降順に、降順の場合は昇順に並び替える
+                        if (rows[0] === sortedRows[0]) {
+                            sortedRows.reverse();
+                            headerCell.innerHTML = headerCell.innerHTML.replace(/▼/, "▲");
+                        }
+                        // 並び替えた行をテーブルに追加する
+                        for (const row of sortedRows) {
+                            worldLandmarksTable.appendChild(row);
+                        }
+                    });
+                }
+
+                // 以下の解析を行う
+                worldLandmarksPrint.innerHTML = "";
                 worldLandmarksPrint.innerHTML += "<h2>解析(1) : 腰(尻)の左右の座標と腰の中点の座標を求める</h2>";
                 const leftHip = result.worldLandmarks[0][23];
                 const rightHip = result.worldLandmarks[0][24];
