@@ -142,18 +142,12 @@ FileSelector.addEventListener("change", (event) => {
             poseLandmarker.setOptions({ runningMode: "IMAGE" });
         }
         const allCanvas = SelectedImage.parentNode.getElementsByClassName("canvas");
-        for (var i = allCanvas.length - 1; i >= 0; i--) {
-            const n = allCanvas[i];
-            n.parentNode.removeChild(n);
-        }
         poseLandmarker.detect(SelectedImage, (result) => {
             const canvas = document.createElement("canvas");
             canvas.setAttribute("class", "canvas");
             canvas.setAttribute("width", SelectedImage.naturalWidth + "px");
             canvas.setAttribute("height", SelectedImage.naturalHeight + "px");
             canvas.style =
-                // "left: 0px;" +
-                // "top: 0px;" +
                 "left: " + SelectedImage.offsetLeft + "px;" +
                 "top: " + SelectedImage.offsetTop + "px;" +
                 "width: " +
@@ -176,12 +170,9 @@ FileSelector.addEventListener("change", (event) => {
                 console.log("landmark : ");
                 console.log(landmark);
                 landmarksPrint.innerHTML = "";
-                for (const [i, point] of landmark.landmarkList.entries()) {
-                    if (i == 0) {
-                        landmarksPrint.innerHTML = "x: " + point.x + ", y: " + point.y + ", z: " + point.z;
-                    } else {
-                        landmarksPrint.innerHTML += "<br>x: " + point.x + ", y: " + point.y + ", z: " + point.z;
-                    }}
+                for (const [i, point] of Worldlandmarks.entries()) {
+                    landmarksPrint.innerHTML += `landmark ${i} : (${point.x}, ${point.y})<br>`;
+                }
             }
         })};
         
