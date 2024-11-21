@@ -538,6 +538,10 @@ FileSelector.addEventListener("change", (event) => {
                 // radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
                 radius: 5
             });
+            additionalDrawingUtils.drawLandmarks([rightShoulderLandmark,leftShoulderLandmark], {
+                color: "orange",
+                radius: 7
+            });
             additionalDrawingUtils.drawLandmarks([shoulderCenterAfterAnalysis2Landmark,leftShoulderAfterConclusionLandmark,rightShoulderAfterConclusionLandmark], {
                 color: "red",
                 radius: 7
