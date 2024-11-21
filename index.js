@@ -498,6 +498,8 @@ FileSelector.addEventListener("change", (event) => {
 
             worldLandmarksPrint.innerHTML += `<br><br>画像に追加するための情報 : <br>右肩移動後 : x = ${Math.round(rightShoulderAfterConclusionLandmark.x * 1000) / 1000}, y = ${Math.round(rightShoulderAfterConclusionLandmark.y * 1000) / 1000}, z = ${Math.round(rightShoulderAfterConclusionLandmark.z * 1000) / 1000}<br>`;
             worldLandmarksPrint.innerHTML += `左肩移動後 : x = ${Math.round(leftShoulderAfterConclusionLandmark.x * 1000) / 1000}, y = ${Math.round(leftShoulderAfterConclusionLandmark.y * 1000) / 1000}, z = ${Math.round(leftShoulderAfterConclusionLandmark.z * 1000) / 1000}<br>`;
+            worldLandmarksPrint.innerHTML += `spineLengthLandmark : ${Math.round(spineLengthLandmark * 1000) / 1000}<br>`;
+            worldLandmarksPrint.innerHTML += `hipAnkleLengthLandmark : ${Math.round(hipAnkleLengthLandmark * 1000) / 1000}<br>`;
             // canvasに半径2の赤い点を描画する
 // const canvas = document.createElement("canvas");
 // canvas.setAttribute("class", "canvas");
