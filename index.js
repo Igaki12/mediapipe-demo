@@ -570,7 +570,7 @@ const canvasVideo = document.getElementById("canvasVideo");
 const videoResult = document.getElementById("videoResult");
 const videoSelector = document.getElementById("videoSelector");
 
-videoSelector.addEventListener("change", (event) => {
+videoSelector.addEventListener("change",async (event) => {
     const file = event.target.files[0];
     if (!file) {
         return;
@@ -586,6 +586,24 @@ videoSelector.addEventListener("change", (event) => {
             runningMode = "VIDEO";
             poseLandmarker.setOptions({ runningMode: "VIDEO" });
         }
+        // returnがあるタイプのposeLandmarker.detectForVideoを使う: https://ai.google.dev/edge/api/mediapipe/js/tasks-vision.poselandmarker#poselandmarkerdetectforvideo
+        poseLandmarker.detectForVideo(selectedVideo, performance.now(), (result) => {
+            videoResult.innerHTML = result;
+            const canvasCtx = canvasVideo.getContext("2d");
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasVideo.width, canvasVideo.height);
+            for (const landmark of result.landmarks) {
+                drawingUtils.drawLandmarks(landmark, {
+                    radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                });
+                drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            }
+            canvasCtx.restore();
+        }
+        );
+        return;
+
+        
         // 動画再生が開始されると、予測を開始する
         selectedVideo.addEventListener("play", () => {
             console.log("Video started");
