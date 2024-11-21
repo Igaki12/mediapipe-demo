@@ -51,7 +51,7 @@ limitations under the License. -->
     <p>Safariや古い端末では正常に動作しない可能性があります。</p>   
     <input type="file" accept="image/*" id="fileSelector" />
     <div id="selectedImageDiv">
-      <img id="selectedImage" width="100%" crossorigin="anonymous" title="ここに画像が表示されます" />
+      <img id="selectedImage" width="100%" crossorigin="anonymous" title="ここに画像が表示されます"  loading="lazy"/>
     </div>
     <h2>33点の座標(単位：センチメートル)</h2>
     <p>X軸は腰の中心(左右の尻を結ぶ中点)から左方向(写真では右方向)、Y軸は腰の中心から下方向、Z軸は腰の中心から正面前方向(写真では手前方向)を示します。<br>点の読み取り方法については、Google Mediapipeの公式ドキュメントを参照してください : <a href='https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker?hl=ja' target='_blank'>https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker?hl=ja</a><br><br></p>
@@ -65,6 +65,14 @@ limitations under the License. -->
     <p id="worldLandmarksPrint"></p>
     <br>
     <br>
+
+    <h2>Demo: Detecting video files (mp4)</h2>
+    <p>動画ファイル(mp4)をアップロードして、骨格の傾きを検出することができます。</p>
+    <input type="file" accept="video/mp4" id="videoSelector" />
+    <div id="selectedVideoDiv">
+      <video id="selectedVideo" width="100%" crossorigin="anonymous" title="ここに動画が表示されます" controls></video>
+    </div>
+    <p id="videoResult"></p>
 
     <h2>Demo: Webcam continuous pose landmarks detection</h2>
     <p>ボタンをクリックし、Webカメラを許可することで、リアルタイムで骨格の傾きを検出することができます。</p>
