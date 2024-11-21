@@ -534,15 +534,17 @@ FileSelector.addEventListener("change", (event) => {
             const additionalCanvasCtx = additionalCanvas.getContext("2d");
             const additionalDrawingUtils = new DrawingUtils(additionalCanvasCtx);
             additionalDrawingUtils.drawLandmarks([hipCenterLandmark,shoulderCenterLandmark,ankleCenterLandmark], {
-                color: "white",
+                color: "orange",
                 // radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-                radius: 7
+                radius: 5
             });
             additionalDrawingUtils.drawLandmarks([shoulderCenterAfterAnalysis2Landmark,leftShoulderAfterConclusionLandmark,rightShoulderAfterConclusionLandmark], {
                 color: "red",
                 radius: 7
             });
-            additionalDrawingUtils.drawConnectors([hipCenterLandmark,ankleCenterLandmark], PoseLandmarker.POSE_CONNECTIONS);
+            // 線の色を指定する
+            additionalDrawingUtils.drawConnectors([shoulderCenterLandmark,hipCenterLandmark], PoseLandmarker.POSE_CONNECTIONS, {color: "orange"});
+            // additionalDrawingUtils.drawConnectors([hipCenterLandmark,ankleCenterLandmark], PoseLandmarker.POSE_CONNECTIONS);
 
         }
         );
