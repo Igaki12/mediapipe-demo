@@ -442,7 +442,7 @@ FileSelector.addEventListener("change", (event) => {
             };
             worldLandmarksPrint.innerHTML += `解析4で導き出された肩の中点 : Δx = ${Math.round((shoulderCenterAfterAnalysis2.x - shoulderCenter.x) * 1000) / 10}cm, Δy = ${Math.round((shoulderCenterAfterAnalysis2.y - shoulderCenter.y) * 1000) / 10}cm, Δz = ${Math.round((shoulderCenterAfterAnalysis2.z - shoulderCenter.z) * 1000) / 10}cm<br><br>`;
 
-            // 同じ計算をlandmarksに対して行う
+            // 同じ計算をlandmarksに対して行う X,Y座標についてのみ行う
             const rightAnkleLandmark = result.landmarks[0][28];
             const leftAnkleLandmark = result.landmarks[0][27];
             const hipCenterLandmark = {
@@ -460,12 +460,12 @@ FileSelector.addEventListener("change", (event) => {
                 y: hipCenterLandmark.y - ankleCenterLandmark.y,
                 z: hipCenterLandmark.z - ankleCenterLandmark.z
             };
-            const hipAnkleLengthLandmark = Math.sqrt(hipAnkleLineLandmark.x ** 2 + hipAnkleLineLandmark.y ** 2 + hipAnkleLineLandmark.z ** 2);
-            const spineLengthLandmark = Math.sqrt((shoulderCenterLandmark.x - hipCenterLandmark.x) ** 2 + (shoulderCenterLandmark.y - hipCenterLandmark.y) ** 2 + (shoulderCenterLandmark.z - hipCenterLandmark.z) ** 2);
+            const hipAnkleLengthLandmarkXY = Math.sqrt(hipAnkleLineLandmark.x ** 2 + hipAnkleLineLandmark.y ** 2);
+            const spineLengthLandmarkXY = Math.sqrt((shoulderCenterLandmark.x - hipCenterLandmark.x) ** 2 + (shoulderCenterLandmark.y - hipCenterLandmark.y) ** 2);
             const shoulderCenterAfterAnalysis2Landmark = {
-                x: hipCenterLandmark.x + (hipAnkleLineLandmark.x * spineLengthLandmark / hipAnkleLengthLandmark),
-                y: hipCenterLandmark.y + (hipAnkleLineLandmark.y * spineLengthLandmark / hipAnkleLengthLandmark),
-                z: hipCenterLandmark.z + (hipAnkleLineLandmark.z * spineLengthLandmark / hipAnkleLengthLandmark)
+                x: hipCenterLandmark.x + (hipAnkleLineLandmark.x * spineLengthLandmarkXY / hipAnkleLengthLandmarkXY),
+                y: hipCenterLandmark.y + (hipAnkleLineLandmark.y * spineLengthLandmarkXY / hipAnkleLengthLandmarkXY),
+                z: hipCenterLandmark.z + (hipAnkleLineLandmark.z * spineLengthLandmarkXY / hipAnkleLengthLandmarkXY)
             };
 
             worldLandmarksPrint.innerHTML += "<h2>結論</h2>";
