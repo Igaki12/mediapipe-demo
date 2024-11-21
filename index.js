@@ -445,11 +445,6 @@ FileSelector.addEventListener("change", (event) => {
             // 同じ計算をlandmarksに対して行う
             const rightAnkleLandmark = result.landmarks[0][28];
             const leftAnkleLandmark = result.landmarks[0][27];
-            const ankleLineLandmark = {
-                x: rightAnkleLandmark.x - leftAnkleLandmark.x,
-                y: rightAnkleLandmark.y - leftAnkleLandmark.y,
-                z: rightAnkleLandmark.z - leftAnkleLandmark.z
-            };
             const hipCenterLandmark = {
                 x: (leftHipLandmark.x + rightHipLandmark.x) / 2,
                 y: (leftHipLandmark.y + rightHipLandmark.y) / 2,
@@ -536,10 +531,10 @@ FileSelector.addEventListener("change", (event) => {
             SelectedImage.parentNode.appendChild(additionalCanvas);
             const additionalCanvasCtx = additionalCanvas.getContext("2d");
             const additionalDrawingUtils = new DrawingUtils(additionalCanvasCtx);
-            additionalDrawingUtils.drawLandmarks([rightShoulderAfterConclusionLandmark, leftShoulderAfterConclusionLandmark], {
+            additionalDrawingUtils.drawLandmarks([rightShoulderAfterConclusionLandmark, leftShoulderAfterConclusionLandmark,hipCenterLandmark,shoulderCenterLandmark,ankleCenterLandmark], {
                 color: "red",
                 // radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-                radius: 5
+                radius: 7
             });
 
         }
