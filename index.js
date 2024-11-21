@@ -588,18 +588,24 @@ videoSelector.addEventListener("change", (event) => {
         }
         // 動画再生が開始されると、予測を開始する
         selectedVideo.addEventListener("play", () => {
-            
-
+            console.log("Video started");
             predictVideo();
         }
         );
 
         // 動画が再生されている限り、requestAnimationFrameを呼び出し続ける
-        let lastVideoTime = -1;
 
         async function predictVideo() {
-            if (lastVideoTime !== selectedVideo.currentTime) {
-                lastVideoTime = selectedVideo.currentTime;
+            // 動画の再生が終了している場合、再生を停止する
+            if (selectedVideo.ended) {
+                console.log("Video ended");
+                selectedVideo.pause();
+                return;
+            }
+            // canvasに描画する
+            canvas.style.height = selectedVideo.style.height;
+            canvas.style.width = selectedVideo.style.width;
+            // 予測を開始する
                 poseLandmarker.detectForVideo(selectedVideo, performance.now(), (result) => {
                     const canvasCtx = canvasVideo.getContext("2d");
                     canvasCtx.save();
@@ -612,7 +618,6 @@ videoSelector.addEventListener("change", (event) => {
                     }
                     canvasCtx.restore();
                 });
-            }
             if (!selectedVideo.paused) {
                 window.requestAnimationFrame(predictVideo);
             }
