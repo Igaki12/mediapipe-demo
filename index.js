@@ -586,19 +586,37 @@ videoSelector.addEventListener("change", (event) => {
             runningMode = "VIDEO";
             poseLandmarker.setOptions({ runningMode: "VIDEO" });
         }
-        let startTimeMs = performance.now();
-        poseLandmarker.detectForVideo(selectedVideo, startTimeMs, (result) => {
-            const canvasCtx = canvasVideo.getContext("2d");
-            canvasCtx.save();
-            canvasCtx.clearRect(0, 0, canvasVideo.width, canvasVideo.height);
-            for (const landmark of result.landmarks) {
-                drawingUtils.drawLandmarks(landmark, {
-                    radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+        // 動画再生が開始されると、予測を開始する
+        selectedVideo.addEventListener("play", () => {
+            
+
+            predictVideo();
+        }
+        );
+
+        // 動画が再生されている限り、requestAnimationFrameを呼び出し続ける
+        let lastVideoTime = -1;
+
+        async function predictVideo() {
+            if (lastVideoTime !== selectedVideo.currentTime) {
+                lastVideoTime = selectedVideo.currentTime;
+                poseLandmarker.detectForVideo(selectedVideo, performance.now(), (result) => {
+                    const canvasCtx = canvasVideo.getContext("2d");
+                    canvasCtx.save();
+                    canvasCtx.clearRect(0, 0, canvasVideo.width, canvasVideo.height);
+                    for (const landmark of result.landmarks) {
+                        drawingUtils.drawLandmarks(landmark, {
+                            radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                        });
+                        drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+                    }
+                    canvasCtx.restore();
                 });
-                drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
             }
-            canvasCtx.restore();
-        });
+            if (!selectedVideo.paused) {
+                window.requestAnimationFrame(predictVideo);
+            }
+        }
     }
 }
 );
