@@ -532,7 +532,7 @@ FileSelector.addEventListener("change", (event) => {
             const additionalCanvasCtx = additionalCanvas.getContext("2d");
             const additionalDrawingUtils = new DrawingUtils(additionalCanvasCtx);
             additionalDrawingUtils.drawLandmarks([hipCenterLandmark,shoulderCenterLandmark,ankleCenterLandmark], {
-                color: "orange",
+                color: "white",
                 // radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
                 radius: 7
             });
@@ -540,6 +540,7 @@ FileSelector.addEventListener("change", (event) => {
                 color: "red",
                 radius: 7
             });
+            additionalDrawingUtils.drawConnectors([hipCenterLandmark,ankleCenterLandmark], PoseLandmarker.POSE_CONNECTIONS);
 
         }
         );
