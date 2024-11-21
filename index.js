@@ -563,6 +563,44 @@ FileSelector.addEventListener("change", (event) => {
 );
 
 
+
+// アップロードした動画を表示する
+const selectedVideo = document.getElementById("selectedVideo");
+const canvasVideo = document.getElementById("canvasVideo");
+const videoResult = document.getElementById("videoResult");
+const videpSelector = document.getElementById("videpSelector");
+
+videpSelector.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    const url = URL.createObjectURL(file);
+    selectedVideo.src = url;
+    selectedVideo.onload = () => {
+        if (!poseLandmarker) {
+            console.log("Wait! poseLandmaker not loaded yet.");
+            return;
+        }
+        if (runningMode === "IMAGE") {
+            runningMode = "VIDEO";
+            poseLandmarker.setOptions({ runningMode: "VIDEO" });
+        }
+        let startTimeMs = performance.now();
+        poseLandmarker.detectForVideo(selectedVideo, startTimeMs, (result) => {
+            const canvasCtx = canvasVideo.getContext("2d");
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasVideo.width, canvasVideo.height);
+            for (const landmark of result.landmarks) {
+                drawingUtils.drawLandmarks(landmark, {
+                    radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                });
+                drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            }
+            canvasCtx.restore();
+        });
+    }
+}
+);
+
+
 /********************************************************************
 // Demo 2: Continuously grab image from webcam stream and detect it.
 ********************************************************************/
