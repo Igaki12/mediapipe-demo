@@ -139,6 +139,8 @@ FileSelector.addEventListener("change", (event) => {
             runningMode = "IMAGE";
             poseLandmarker.setOptions({ runningMode: "IMAGE" });
         }
+        // segmentationMaskを有効にする
+        // poseLandmarker.setOptions({ outputSegmentationMasks: true });
         const allCanvas = SelectedImage.parentNode.getElementsByClassName("canvas");
         poseLandmarker.detect(SelectedImage, async (result) => {
             const canvas = document.createElement("canvas");
@@ -502,8 +504,8 @@ FileSelector.addEventListener("change", (event) => {
             worldLandmarksPrint.innerHTML += `元の左肩座標 : x = ${Math.round(leftShoulderLandmark.x * 1000) / 1000}, y = ${Math.round(leftShoulderLandmark.y * 1000) / 1000}, z = ${Math.round(leftShoulderLandmark.z * 1000) / 1000}<br>`;
             worldLandmarksPrint.innerHTML += `肩の中点移動前 : x = ${Math.round(shoulderCenterLandmark.x * 1000) / 1000}, y = ${Math.round(shoulderCenterLandmark.y * 1000) / 1000}, z = ${Math.round(shoulderCenterLandmark.z * 1000) / 1000}<br>`;
             worldLandmarksPrint.innerHTML += `腰の中点移動前 : x = ${Math.round(hipCenterLandmark.x * 1000) / 1000}, y = ${Math.round(hipCenterLandmark.y * 1000) / 1000}, z = ${Math.round(hipCenterLandmark.z * 1000) / 1000}<br>`;
-            worldLandmarksPrint.innerHTML += `spineLengthLandmark : ${Math.round(spineLengthLandmark * 1000) / 1000}<br>`;
-            worldLandmarksPrint.innerHTML += `hipAnkleLengthLandmark : ${Math.round(hipAnkleLengthLandmark * 1000) / 1000}<br>`;
+            worldLandmarksPrint.innerHTML += `spineLengthLandmark : ${Math.round(spineLengthLandmarkXY * 1000) / 1000}<br>`;
+            worldLandmarksPrint.innerHTML += `hipAnkleLengthLandmark : ${Math.round(hipAnkleLengthLandmarkXY * 1000) / 1000}<br>`;
             // canvasに半径2の赤い点を描画する
 // const canvas = document.createElement("canvas");
 // canvas.setAttribute("class", "canvas");
