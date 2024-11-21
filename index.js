@@ -450,7 +450,6 @@ FileSelector.addEventListener("change", (event) => {
                 y: rightAnkleLandmark.y - leftAnkleLandmark.y,
                 z: rightAnkleLandmark.z - leftAnkleLandmark.z
             };
-            const hipAnkleLengthLandmark = Math.sqrt(ankleLineLandmark.x ** 2 + ankleLineLandmark.y ** 2 + ankleLineLandmark.z ** 2);
             const hipCenterLandmark = {
                 x: (leftHipLandmark.x + rightHipLandmark.x) / 2,
                 y: (leftHipLandmark.y + rightHipLandmark.y) / 2,
@@ -466,6 +465,7 @@ FileSelector.addEventListener("change", (event) => {
                 y: hipCenterLandmark.y - ankleCenterLandmark.y,
                 z: hipCenterLandmark.z - ankleCenterLandmark.z
             };
+            const hipAnkleLengthLandmark = Math.sqrt(hipAnkleLineLandmark.x ** 2 + hipAnkleLineLandmark.y ** 2 + hipAnkleLineLandmark.z ** 2);
             const spineLengthLandmark = Math.sqrt((shoulderCenterLandmark.x - hipCenterLandmark.x) ** 2 + (shoulderCenterLandmark.y - hipCenterLandmark.y) ** 2 + (shoulderCenterLandmark.z - hipCenterLandmark.z) ** 2);
             const shoulderCenterAfterAnalysis2Landmark = {
                 x: hipCenterLandmark.x + (hipAnkleLineLandmark.x * spineLengthLandmark / hipAnkleLengthLandmark),
@@ -538,7 +538,8 @@ FileSelector.addEventListener("change", (event) => {
             const additionalDrawingUtils = new DrawingUtils(additionalCanvasCtx);
             additionalDrawingUtils.drawLandmarks([rightShoulderAfterConclusionLandmark, leftShoulderAfterConclusionLandmark], {
                 color: "red",
-                radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                // radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                radius: 5
             });
 
         }
