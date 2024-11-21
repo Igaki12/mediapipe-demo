@@ -568,9 +568,9 @@ FileSelector.addEventListener("change", (event) => {
 const selectedVideo = document.getElementById("selectedVideo");
 const canvasVideo = document.getElementById("canvasVideo");
 const videoResult = document.getElementById("videoResult");
-const videpSelector = document.getElementById("videpSelector");
+const videoSelector = document.getElementById("videoSelector");
 
-videpSelector.addEventListener("change", (event) => {
+videoSelector.addEventListener("change", (event) => {
     const file = event.target.files[0];
     if (!file) {
         return;
