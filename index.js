@@ -531,9 +531,13 @@ FileSelector.addEventListener("change", (event) => {
             SelectedImage.parentNode.appendChild(additionalCanvas);
             const additionalCanvasCtx = additionalCanvas.getContext("2d");
             const additionalDrawingUtils = new DrawingUtils(additionalCanvasCtx);
-            additionalDrawingUtils.drawLandmarks([rightShoulderAfterConclusionLandmark, leftShoulderAfterConclusionLandmark,hipCenterLandmark,shoulderCenterLandmark,ankleCenterLandmark], {
-                color: "red",
+            additionalDrawingUtils.drawLandmarks([hipCenterLandmark,shoulderCenterLandmark,ankleCenterLandmark], {
+                color: "orange",
                 // radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                radius: 7
+            });
+            additionalDrawingUtils.drawLandmarks([shoulderCenterAfterAnalysis2Landmark,leftShoulderAfterConclusionLandmark,rightShoulderAfterConclusionLandmark], {
+                color: "red",
                 radius: 7
             });
 
