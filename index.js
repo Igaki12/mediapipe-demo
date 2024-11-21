@@ -569,6 +569,8 @@ const selectedVideo = document.getElementById("selectedVideo");
 const canvasVideo = document.getElementById("canvasVideo");
 const videoResult = document.getElementById("videoResult");
 const videoSelector = document.getElementById("videoSelector");
+canvasVideo.style.left = selectedVideo.offsetLeft + "px";
+canvasVideo.style.top = selectedVideo.offsetTop + "px";
 
 videoSelector.addEventListener("change",async (event) => {
     const file = event.target.files[0];
