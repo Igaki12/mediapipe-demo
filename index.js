@@ -500,6 +500,8 @@ FileSelector.addEventListener("change", (event) => {
             worldLandmarksPrint.innerHTML += `元の右肩座標 : x = ${Math.round(rightShoulderLandmark.x * 1000) / 1000}, y = ${Math.round(rightShoulderLandmark.y * 1000) / 1000}, z = ${Math.round(rightShoulderLandmark.z * 1000) / 1000}<br>`;
             worldLandmarksPrint.innerHTML += `左肩移動後 : x = ${Math.round(leftShoulderAfterConclusionLandmark.x * 1000) / 1000}, y = ${Math.round(leftShoulderAfterConclusionLandmark.y * 1000) / 1000}, z = ${Math.round(leftShoulderAfterConclusionLandmark.z * 1000) / 1000}<br>`;
             worldLandmarksPrint.innerHTML += `元の左肩座標 : x = ${Math.round(leftShoulderLandmark.x * 1000) / 1000}, y = ${Math.round(leftShoulderLandmark.y * 1000) / 1000}, z = ${Math.round(leftShoulderLandmark.z * 1000) / 1000}<br>`;
+            worldLandmarksPrint.innerHTML += `肩の中点移動前 : x = ${Math.round(shoulderCenterLandmark.x * 1000) / 1000}, y = ${Math.round(shoulderCenterLandmark.y * 1000) / 1000}, z = ${Math.round(shoulderCenterLandmark.z * 1000) / 1000}<br>`;
+            worldLandmarksPrint.innerHTML += `腰の中点移動前 : x = ${Math.round(hipCenterLandmark.x * 1000) / 1000}, y = ${Math.round(hipCenterLandmark.y * 1000) / 1000}, z = ${Math.round(hipCenterLandmark.z * 1000) / 1000}<br>`;
             worldLandmarksPrint.innerHTML += `spineLengthLandmark : ${Math.round(spineLengthLandmark * 1000) / 1000}<br>`;
             worldLandmarksPrint.innerHTML += `hipAnkleLengthLandmark : ${Math.round(hipAnkleLengthLandmark * 1000) / 1000}<br>`;
             // canvasに半径2の赤い点を描画する
