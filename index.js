@@ -599,6 +599,7 @@ videoSelector.addEventListener("change", async (event) => {
                 poseLandmarker.setOptions({ runningMode: "VIDEO" });
             }
             console.log("Video duration : " + selectedVideo.duration);
+            console.log("Video fps : " + selectedVideo.fps);
             for (let timestamp = 0; timestamp < selectedVideo.duration * 1000; timestamp += 1000 / selectedVideo.fps){
                 const result = await poseLandmarker.detectForVideo(selectedVideo, timestamp);
                 if (result && result.landmarks && result.landmarks[0]){
