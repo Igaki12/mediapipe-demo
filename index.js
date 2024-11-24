@@ -408,11 +408,11 @@ FileSelector.addEventListener("change", (event) => {
                 z: shoulderCenterLandmark.z - (0.5 * hipLineLandmark.z * shoulderLengthLandmark / hipLengthLandmark)
             };
 
-// const drawingUtils = new DrawingUtils(canvasCtx);
-// for (const landmark of result.landmarks) {
-//     drawingUtils.drawLandmarks(landmark, {
-//         radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-//     });
+            // const drawingUtils = new DrawingUtils(canvasCtx);
+            // for (const landmark of result.landmarks) {
+            //     drawingUtils.drawLandmarks(landmark, {
+            //         radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+            //     });
             // drawingUtilsに、ただした後の左右肩の位置を描画する
 
             // drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
@@ -507,21 +507,21 @@ FileSelector.addEventListener("change", (event) => {
             worldLandmarksPrint.innerHTML += `spineLengthLandmark : ${Math.round(spineLengthLandmarkXY * 1000) / 1000}<br>`;
             worldLandmarksPrint.innerHTML += `hipAnkleLengthLandmark : ${Math.round(hipAnkleLengthLandmarkXY * 1000) / 1000}<br>`;
             // canvasに半径2の赤い点を描画する
-// const canvas = document.createElement("canvas");
-// canvas.setAttribute("class", "canvas");
-// canvas.setAttribute("width", SelectedImage.naturalWidth + "px");
-// canvas.setAttribute("height", SelectedImage.naturalHeight + "px");
-// canvas.style =
-//     "left: " + SelectedImage.offsetLeft + "px;" +
-//     "top: " + SelectedImage.offsetTop + "px;" +
-//     "width: " +
-//     SelectedImage.width +
-//     "px;" +
-//     "height: " +
-//     SelectedImage.height +
-//     "px;";
+            // const canvas = document.createElement("canvas");
+            // canvas.setAttribute("class", "canvas");
+            // canvas.setAttribute("width", SelectedImage.naturalWidth + "px");
+            // canvas.setAttribute("height", SelectedImage.naturalHeight + "px");
+            // canvas.style =
+            //     "left: " + SelectedImage.offsetLeft + "px;" +
+            //     "top: " + SelectedImage.offsetTop + "px;" +
+            //     "width: " +
+            //     SelectedImage.width +
+            //     "px;" +
+            //     "height: " +
+            //     SelectedImage.height +
+            //     "px;";
 
-// SelectedImage.parentNode.appendChild(canvas);
+            // SelectedImage.parentNode.appendChild(canvas);
 
             const additionalCanvas = document.createElement("canvas");
             additionalCanvas.setAttribute("class", "canvas");
@@ -539,21 +539,21 @@ FileSelector.addEventListener("change", (event) => {
             SelectedImage.parentNode.appendChild(additionalCanvas);
             const additionalCanvasCtx = additionalCanvas.getContext("2d");
             const additionalDrawingUtils = new DrawingUtils(additionalCanvasCtx);
-            additionalDrawingUtils.drawLandmarks([hipCenterLandmark,shoulderCenterLandmark,ankleCenterLandmark], {
+            additionalDrawingUtils.drawLandmarks([hipCenterLandmark, shoulderCenterLandmark, ankleCenterLandmark], {
                 color: "orange",
                 // radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
                 radius: 5
             });
-            additionalDrawingUtils.drawLandmarks([rightShoulderLandmark,leftShoulderLandmark], {
+            additionalDrawingUtils.drawLandmarks([rightShoulderLandmark, leftShoulderLandmark], {
                 color: "orange",
                 radius: 7
             });
-            additionalDrawingUtils.drawLandmarks([shoulderCenterAfterAnalysis2Landmark,leftShoulderAfterConclusionLandmark,rightShoulderAfterConclusionLandmark], {
+            additionalDrawingUtils.drawLandmarks([shoulderCenterAfterAnalysis2Landmark, leftShoulderAfterConclusionLandmark, rightShoulderAfterConclusionLandmark], {
                 color: "red",
                 radius: 7
             });
             // 線の色を指定する
-            additionalDrawingUtils.drawConnectors([shoulderCenterLandmark,hipCenterLandmark], PoseLandmarker.POSE_CONNECTIONS, {color: "orange"});
+            additionalDrawingUtils.drawConnectors([shoulderCenterLandmark, hipCenterLandmark], PoseLandmarker.POSE_CONNECTIONS, { color: "orange" });
             // additionalDrawingUtils.drawConnectors([hipCenterLandmark,ankleCenterLandmark], PoseLandmarker.POSE_CONNECTIONS);
 
         }
@@ -575,7 +575,7 @@ canvasVideo.width = selectedVideo.width;
 canvasVideo.height = selectedVideo.height;
 canvasVideo.style.display = "none";
 
-videoSelector.addEventListener("change",async (event) => {
+videoSelector.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (!file) {
         return;
@@ -600,14 +600,13 @@ videoSelector.addEventListener("change",async (event) => {
             }
             // for (let f = 0; f < selectedVideo.duration * 1000; f += 1000 / selectedVideo.fps) {
             for (let f = 0; f < 5; f++) {
-                poseLandmarker.detectForVideo(selectedVideo, f , async (result) => {
-                    console.log("Video result in frame " + f + "ms : ");
-                    console.log(result);
-            // poseLandmarker.detectForVideo(selectedVideo, performance.now(), async (result) => {
-            //     console.log("Video result : ");
-            //     console.log(result);
-            });
-        };
+                const result = poseLandmarker.detectForVideo(selectedVideo, f);
+                console.log("Video result in frame " + f + "ms : ");
+                console.log(result);
+                // poseLandmarker.detectForVideo(selectedVideo, performance.now(), async (result) => {
+                //     console.log("Video result : ");
+                //     console.log(result);
+            };
         }
         );
     };
@@ -625,7 +624,7 @@ videoSelector.addEventListener("change",async (event) => {
         }
         // returnがあるタイプのposeLandmarker.detectForVideoを使う: https://ai.google.dev/edge/api/mediapipe/js/tasks-vision.poselandmarker#poselandmarkerdetectforvideo
         poseLandmarker.detectForVideo(selectedVideo, performance.now(), async (result) => {
-            console.log(result);    
+            console.log(result);
             videoResult.innerHTML = result;
             const canvasCtx = canvasVideo.getContext("2d");
             canvasCtx.save();
@@ -641,7 +640,7 @@ videoSelector.addEventListener("change",async (event) => {
         );
         return;
 
-        
+
         // 動画再生が開始されると、予測を開始する
         selectedVideo.addEventListener("play", () => {
             console.log("Video started");
@@ -662,18 +661,18 @@ videoSelector.addEventListener("change",async (event) => {
             canvas.style.height = selectedVideo.style.height;
             canvas.style.width = selectedVideo.style.width;
             // 予測を開始する
-                poseLandmarker.detectForVideo(selectedVideo, performance.now(), (result) => {
-                    const canvasCtx = canvasVideo.getContext("2d");
-                    canvasCtx.save();
-                    canvasCtx.clearRect(0, 0, canvasVideo.width, canvasVideo.height);
-                    for (const landmark of result.landmarks) {
-                        drawingUtils.drawLandmarks(landmark, {
-                            radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-                        });
-                        drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
-                    }
-                    canvasCtx.restore();
-                });
+            poseLandmarker.detectForVideo(selectedVideo, performance.now(), (result) => {
+                const canvasCtx = canvasVideo.getContext("2d");
+                canvasCtx.save();
+                canvasCtx.clearRect(0, 0, canvasVideo.width, canvasVideo.height);
+                for (const landmark of result.landmarks) {
+                    drawingUtils.drawLandmarks(landmark, {
+                        radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                    });
+                    drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+                }
+                canvasCtx.restore();
+            });
             if (!selectedVideo.paused) {
                 window.requestAnimationFrame(predictVideo);
             }
