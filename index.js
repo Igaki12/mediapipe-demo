@@ -590,6 +590,18 @@ videoSelector.addEventListener("change",async (event) => {
         // 画像が読み込まれたら、予測を開始する
         selectedVideo.addEventListener("loadeddata", () => {
             console.log("Video loadeddata");
+            if (!poseLandmarker) {
+                console.log("Wait! poseLandmaker not loaded yet.");
+                return;
+            }
+            if (runningMode === "IMAGE") {
+                runningMode = "VIDEO";
+                poseLandmarker.setOptions({ runningMode: "VIDEO" });
+            }
+            poseLandmarker.detectForVideo(selectedVideo, performance.now(), async (result) => {
+                console.log("Video result : ");
+                console.log(result);
+            });
         }
         );
     };
