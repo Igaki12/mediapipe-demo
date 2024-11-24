@@ -587,6 +587,11 @@ videoSelector.addEventListener("change",async (event) => {
     reader.onload = () => {
         selectedVideo.src = reader.result;
         console.log("Video loaded with FileReader");
+        // 画像が読み込まれたら、予測を開始する
+        selectedVideo.addEventListener("loadeddata", () => {
+            console.log("Video loadeddata");
+        }
+        );
     };
     return;
     selectedVideo.src = url;
