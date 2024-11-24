@@ -583,68 +583,69 @@ videoSelector.addEventListener("change",async (event) => {
     const url = URL.createObjectURL(file);
     selectedVideo.src = url;
     selectedVideo.onload = () => {
-        // if (!poseLandmarker) {
-        //     console.log("Wait! poseLandmaker not loaded yet.");
-        //     return;
-        // }
-        // if (runningMode === "IMAGE") {
-        //     runningMode = "VIDEO";
-        //     poseLandmarker.setOptions({ runningMode: "VIDEO" });
-        // }
-        // // returnがあるタイプのposeLandmarker.detectForVideoを使う: https://ai.google.dev/edge/api/mediapipe/js/tasks-vision.poselandmarker#poselandmarkerdetectforvideo
-        // poseLandmarker.detectForVideo(selectedVideo, performance.now(), (result) => {
-        //     videoResult.innerHTML = result;
-        //     const canvasCtx = canvasVideo.getContext("2d");
-        //     canvasCtx.save();
-        //     canvasCtx.clearRect(0, 0, canvasVideo.width, canvasVideo.height);
-        //     for (const landmark of result.landmarks) {
-        //         drawingUtils.drawLandmarks(landmark, {
-        //             radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-        //         });
-        //         drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
-        //     }
-        //     canvasCtx.restore();
-        // }
-        // );
-        // return;
+        if (!poseLandmarker) {
+            console.log("Wait! poseLandmaker not loaded yet.");
+            return;
+        }
+        if (runningMode === "IMAGE") {
+            runningMode = "VIDEO";
+            poseLandmarker.setOptions({ runningMode: "VIDEO" });
+        }
+        // returnがあるタイプのposeLandmarker.detectForVideoを使う: https://ai.google.dev/edge/api/mediapipe/js/tasks-vision.poselandmarker#poselandmarkerdetectforvideo
+        poseLandmarker.detectForVideo(selectedVideo, performance.now(), async (result) => {
+            console.log(result);    
+            videoResult.innerHTML = result;
+            const canvasCtx = canvasVideo.getContext("2d");
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasVideo.width, canvasVideo.height);
+            for (const landmark of result.landmarks) {
+                drawingUtils.drawLandmarks(landmark, {
+                    radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                });
+                drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            }
+            canvasCtx.restore();
+        }
+        );
+        return;
 
         
-        // // 動画再生が開始されると、予測を開始する
-        // selectedVideo.addEventListener("play", () => {
-        //     console.log("Video started");
-        //     predictVideo();
-        // }
-        // );
+        // 動画再生が開始されると、予測を開始する
+        selectedVideo.addEventListener("play", () => {
+            console.log("Video started");
+            predictVideo();
+        }
+        );
 
-        // // 動画が再生されている限り、requestAnimationFrameを呼び出し続ける
+        // 動画が再生されている限り、requestAnimationFrameを呼び出し続ける
 
-        // async function predictVideo() {
-        //     // 動画の再生が終了している場合、再生を停止する
-        //     if (selectedVideo.ended) {
-        //         console.log("Video ended");
-        //         selectedVideo.pause();
-        //         return;
-        //     }
-        //     // canvasに描画する
-        //     canvas.style.height = selectedVideo.style.height;
-        //     canvas.style.width = selectedVideo.style.width;
-        //     // 予測を開始する
-        //         poseLandmarker.detectForVideo(selectedVideo, performance.now(), (result) => {
-        //             const canvasCtx = canvasVideo.getContext("2d");
-        //             canvasCtx.save();
-        //             canvasCtx.clearRect(0, 0, canvasVideo.width, canvasVideo.height);
-        //             for (const landmark of result.landmarks) {
-        //                 drawingUtils.drawLandmarks(landmark, {
-        //                     radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
-        //                 });
-        //                 drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
-        //             }
-        //             canvasCtx.restore();
-        //         });
-        //     if (!selectedVideo.paused) {
-        //         window.requestAnimationFrame(predictVideo);
-        //     }
-        // }
+        async function predictVideo() {
+            // 動画の再生が終了している場合、再生を停止する
+            if (selectedVideo.ended) {
+                console.log("Video ended");
+                selectedVideo.pause();
+                return;
+            }
+            // canvasに描画する
+            canvas.style.height = selectedVideo.style.height;
+            canvas.style.width = selectedVideo.style.width;
+            // 予測を開始する
+                poseLandmarker.detectForVideo(selectedVideo, performance.now(), (result) => {
+                    const canvasCtx = canvasVideo.getContext("2d");
+                    canvasCtx.save();
+                    canvasCtx.clearRect(0, 0, canvasVideo.width, canvasVideo.height);
+                    for (const landmark of result.landmarks) {
+                        drawingUtils.drawLandmarks(landmark, {
+                            radius: (data) => DrawingUtils.lerp(data.from?.z ?? 0, -0.15, 0.1, 5, 1)
+                        });
+                        drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+                    }
+                    canvasCtx.restore();
+                });
+            if (!selectedVideo.paused) {
+                window.requestAnimationFrame(predictVideo);
+            }
+        }
     }
 }
 );
