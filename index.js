@@ -608,7 +608,7 @@ videoSelector.addEventListener("change", async (event) => {
                 canvasCtx.drawImage(selectedVideo, 0, 0, canvas.width, canvas.height);
                 const image = new Image();
                 image.src = canvas.toDataURL();
-                
+
             }
 
 
