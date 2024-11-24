@@ -606,6 +606,9 @@ videoSelector.addEventListener("change", async (event) => {
                 document.body.appendChild(canvas);
                 const canvasCtx = canvas.getContext("2d");
                 canvasCtx.drawImage(selectedVideo, 0, 0, canvas.width, canvas.height);
+                const image = new Image();
+                image.src = canvas.toDataURL();
+                
             }
 
 
