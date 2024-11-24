@@ -592,14 +592,20 @@ videoSelector.addEventListener("change", async (event) => {
             // 動画を10分割して、それぞれを画像として予測する
             for (let i = 0; i < 10; i++) {
                 const timestampMs = selectedVideo.duration * 1000 * i / 10;
-                const image = await createImageFromVideo(selectedVideo, timestampMs);
-                image.style.width = 0.2 * selectedVideo.width + "px";
-                image.style.height = 0.2 * selectedVideo.height + "px";
-                image.style.position = "absolute";
-                image.style.left = selectedVideo.offsetLeft + "px";
-                image.style.top = selectedVideo.offsetTop + 0.2 * selectedVideo.height * i + 2*i + "px";
-                document.body.appendChild(image);
 
+                const canvas = document.createElement("canvas");
+                // 動画のtimestampMsのフレームを取得する
+                canvas.width = selectedVideo.videoWidth*0.3;
+                canvas.height = selectedVideo.videoHeight*0.3;
+                canvas.style.top = selectedVideo.offsetTop + i * 0.3 * selectedVideo.height +  3* i + "px";
+                canvas.style.left = selectedVideo.offsetLeft + "px";
+                canvas.style.position = "absolute";
+                canvas.style.zIndex = 1000;
+                canvas.style.border = "1px solid black";
+                canvas.style.display = "block";
+                document.body.appendChild(canvas);
+                const canvasCtx = canvas.getContext("2d");
+                canvasCtx.drawImage(selectedVideo, 0, 0, canvas.width, canvas.height);
             }
 
 
