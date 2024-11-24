@@ -588,7 +588,7 @@ videoSelector.addEventListener("change", async (event) => {
         selectedVideo.src = reader.result;
         console.log("Video loaded with FileReader");
         // 画像が読み込まれたら、予測を開始する
-        selectedVideo.addEventListener("loadeddata", () => {
+        selectedVideo.addEventListener("loadeddata", async () => {
             console.log("Video loadeddata");
             if (!poseLandmarker) {
                 console.log("Wait! poseLandmaker not loaded yet.");
@@ -599,9 +599,11 @@ videoSelector.addEventListener("change", async (event) => {
                 poseLandmarker.setOptions({ runningMode: "VIDEO" });
             }
             for (let timestamp = 0; timestamp < selectedVideo.duration * 1000; timestamp += 1000 / selectedVideo.fps){
-                let result = poseLandmarker.detectForVideo(selectedVideo, timestamp);
-                console.log("Video result at " + timestamp + "ms : ");
-                console.log(result);
+                const result = await poseLandmarker.detectForVideo(selectedVideo, timestamp);
+                if (result && result.landmarks && result.landmarks[0].length > 0) {
+                    console.log("Video result at " + timestamp + "ms : ");
+                    console.log(result);
+                }
                 // poseLandmarker.detectForVideo(selectedVideo, performance.now(), async (result) => {
                 //     console.log("Video result : ");
                 //     console.log(result);
