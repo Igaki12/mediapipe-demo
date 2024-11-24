@@ -587,9 +587,30 @@ videoSelector.addEventListener("change", async (event) => {
     reader.onload = () => {
         selectedVideo.src = reader.result;
         console.log("Video loaded with FileReader");
-        // 画像が読み込まれたら、予測を開始する
+        // 画像が読み込まれたら、
         selectedVideo.addEventListener("loadeddata", async () => {
-                console.log("Video loadeddata");
+            // 動画を10分割して、それぞれを画像として予測する
+            // for (let i = 0; i < 10; i++) {
+            //     const timestampMs = selectedVideo.duration * 1000 * i / 10;
+            //     const canvas = document.createElement("canvas");
+            //     canvas.width = selectedVideo.videoWidth;
+            //     canvas.height = selectedVideo.videoHeight;
+            //     canvas.style.zIndex = 8;
+            //     canvas.style.top = (selectedVideo.offsetTop + i*selectedVideo.videoHeight) + "px";
+            //     canvas.style.left = selectedVideo.offsetLeft + "px";
+            //     canvas.style.position = "absolute";
+            //     canvas.style.border = "1px solid";
+            //     document.body.appendChild(canvas);
+            //     const canvasCtx = canvas.getContext("2d");
+            //     canvasCtx.drawImage(selectedVideo, 0, i*selectedVideo.videoHeight, selectedVideo.videoWidth, selectedVideo.videoHeight, 0, 0, selectedVideo.videoWidth, selectedVideo.videoHeight);
+                // 動画の各フレームを画像としてcanvasに描画する
+
+
+
+
+
+
+            
             if (!poseLandmarker) {
                 console.log("Wait! poseLandmaker not loaded yet.");
                 return;
@@ -600,11 +621,12 @@ videoSelector.addEventListener("change", async (event) => {
             }
             console.log("Video duration : " + selectedVideo.duration);
             for (let timestamp = 0; timestamp < selectedVideo.duration * 1000; timestamp += 1000 / 60 ){
-                let result = await poseLandmarker.detectForVideo(selectedVideo, timestamp);
+                await poseLandmarker.detectForVideo(selectedVideo, timestamp, (result) => {
                 if (result && result.landmarks && result.landmarks.length > 0) {
                     console.log("Video result at " + timestamp + "ms : ");
                     console.log(result);
                 }
+            });
             };
             console.log("Finish video prediction");
         }
