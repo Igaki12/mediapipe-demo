@@ -598,9 +598,9 @@ videoSelector.addEventListener("change", async (event) => {
                 runningMode = "VIDEO";
                 poseLandmarker.setOptions({ runningMode: "VIDEO" });
             }
-            for (let frame = 0; frame < selectedVideo.duration; frame += 0.1 * selectedVideo.duration) {
-                const result = poseLandmarker.detectForVideo(selectedVideo, frame * 1000);
-                console.log("Video result in frame " + frame + " : ");
+            for (let timestamp = 0; timestamp < selectedVideo.duration * 1000; timestamp += 1000 / selectedVideo.fps){
+                let result = poseLandmarker.detectForVideo(selectedVideo, timestamp);
+                console.log("Video result at " + timestamp + "ms : ");
                 console.log(result);
                 // poseLandmarker.detectForVideo(selectedVideo, performance.now(), async (result) => {
                 //     console.log("Video result : ");
