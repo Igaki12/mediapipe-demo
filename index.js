@@ -583,6 +583,7 @@ videoSelector.addEventListener("change",async (event) => {
     const url = URL.createObjectURL(file);
     selectedVideo.src = url;
     selectedVideo.onload = () => {
+        console.log("Video loaded");
         if (!poseLandmarker) {
             console.log("Wait! poseLandmaker not loaded yet.");
             return;
