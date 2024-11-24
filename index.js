@@ -590,21 +590,17 @@ videoSelector.addEventListener("change", async (event) => {
         // 画像が読み込まれたら、
         selectedVideo.addEventListener("loadeddata", async () => {
             // 動画を10分割して、それぞれを画像として予測する
-            // for (let i = 0; i < 10; i++) {
-            //     const timestampMs = selectedVideo.duration * 1000 * i / 10;
-            //     const canvas = document.createElement("canvas");
-            //     canvas.width = selectedVideo.videoWidth;
-            //     canvas.height = selectedVideo.videoHeight;
-            //     canvas.style.zIndex = 8;
-            //     canvas.style.top = (selectedVideo.offsetTop + i*selectedVideo.videoHeight) + "px";
-            //     canvas.style.left = selectedVideo.offsetLeft + "px";
-            //     canvas.style.position = "absolute";
-            //     canvas.style.border = "1px solid";
-            //     document.body.appendChild(canvas);
-            //     const canvasCtx = canvas.getContext("2d");
-            //     canvasCtx.drawImage(selectedVideo, 0, i*selectedVideo.videoHeight, selectedVideo.videoWidth, selectedVideo.videoHeight, 0, 0, selectedVideo.videoWidth, selectedVideo.videoHeight);
-                // 動画の各フレームを画像としてcanvasに描画する
+            for (let i = 0; i < 10; i++) {
+                const timestampMs = selectedVideo.duration * 1000 * i / 10;
+                const image = await createImageFromVideo(selectedVideo, timestampMs);
+                image.style.width = 0.2 * selectedVideo.width + "px";
+                image.style.height = 0.2 * selectedVideo.height + "px";
+                image.style.position = "absolute";
+                image.style.left = selectedVideo.offsetLeft + "px";
+                image.style.top = selectedVideo.offsetTop + 0.2 * selectedVideo.height * i + 2*i + "px";
+                document.body.appendChild(image);
 
+            }
 
 
 
