@@ -580,7 +580,15 @@ videoSelector.addEventListener("change",async (event) => {
     if (!file) {
         return;
     }
-    const url = URL.createObjectURL(file);
+    // const url = URL.createObjectURL(file);
+    // FileReaderを使って、ファイルを読み込む
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+        selectedVideo.src = reader.result;
+        console.log("Video loaded with FileReader");
+    };
+    return;
     selectedVideo.src = url;
     selectedVideo.onload = () => {
         console.log("Video loaded");
